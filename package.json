@@ -1,0 +1,22 @@
+{
+  "name": "recipes-tonight",
+  "version": "0.0.2",
+  "description": "A searchable recipe binder app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MetaEvan/recipes-tonight.git"
+  },
+  "keywords": [
+    "recipes"
+  ],
+  "author": "Evan Mencke",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/MetaEvan/recipes-tonight/issues"
+  },
+  "homepage": "https://github.com/MetaEvan/recipes-tonight#readme"
+}

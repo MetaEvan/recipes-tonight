@@ -1,0 +1,22 @@
+{
+  "name": "recipes-tonight",
+  "description": "A searchable recipe binder app",
+  "main": "index.js",
+  "authors": [
+    "Evan Mencke"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "recipes"
+  ],
+  "homepage": "https://github.com/MetaEvan/recipes-tonight",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "client/lib",
+    "test",
+    "tests"
+  ]
+}
