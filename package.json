@@ -4,6 +4,7 @@
   "description": "A searchable recipe binder app",
   "main": "index.js",
   "scripts": {
+    "start": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -11,12 +12,17 @@
     "url": "git+https://github.com/MetaEvan/recipes-tonight.git"
   },
   "keywords": [
-    "recipes"
+    "recipes",
+    "node"
   ],
   "author": "Evan Mencke",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/MetaEvan/recipes-tonight/issues"
   },
-  "homepage": "https://github.com/MetaEvan/recipes-tonight#readme"
+  "homepage": "https://github.com/MetaEvan/recipes-tonight#readme",
+  "dependencies": {
+    "express": "^4.13.4",
+    "morgan": "^1.7.0"
+  }
 }
