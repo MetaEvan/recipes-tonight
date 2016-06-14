@@ -23,6 +23,7 @@
   "homepage": "https://github.com/MetaEvan/recipes-tonight#readme",
   "dependencies": {
     "express": "^4.13.4",
+    "mongodb": "^2.1.18",
     "morgan": "^1.7.0"
   }
 }
