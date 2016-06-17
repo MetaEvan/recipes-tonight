@@ -37,12 +37,6 @@ var printObj = function(obj, iterator = 1) {
 };
 
 
-var testRecipe = {
-  // _id: 1,
-  ingredients: ["flour", "water", "yeast", "salt"],
-  recipeText: "mix, then bake"
-};
-
 
 var insertNewRecord = function(db, doc, col, cb = closeDB, ...args) {
   connectDB(function(db) {
@@ -66,23 +60,23 @@ var insertNewRecordAndVerify = function(db, doc, col, cb = closeDB, ...args) {
 };
 
 
-var searchDB = function(db, searchObj, col, cb = closeDB, ...args) {
-  db.collection(col).find(searchObj).toArray(function(err, result) {
-      if (err) {
-        closeDB(db);
-        throw `Error searching in ${col}: ${err}`;
-      } else if (result.length) {
-        console.log('Found:', result);
-      } else {
-        console.log('No document(s) found with defined search criteria!');
-      }  
-      cb(db, ...args);
-    });
+var searchDB = function(db, searchTerms, col, cb = closeDB, ...args) {
+  db.collection(col).find(searchTerms).toArray(function(err, result) {
+    if (err) {
+      closeDB(db);
+      throw `Error searching in ${col}: ${err}`;
+    } else if (result.length) {
+      console.log('Found:', result);
+    } else {
+      console.log('No document(s) found with defined search criteria!');
+    }  
+    cb(db, ...args);
+  });
 };
 
 
 var findRecord = function(db, searchTerms, col, cb = closeDB, ...args) {
-  if (typeof(searchTerms) === "string") {
+  if (typeof(searchTerms) === "string") {  //should only trigger if looking for document id
     searchTerms = {"_id":ObjectId(searchTerms)};
   }
   console.log("findRecord searchTerms: ", searchTerms);
@@ -95,15 +89,40 @@ var findRecord = function(db, searchTerms, col, cb = closeDB, ...args) {
   }
 };
 
+var updateRecord = function(db, searchTerms, revisedDoc, col, cb = closeDB, ...args) {
+  connectDB(function(db) {
+    db.collection(col).update(searchTerms, revisedDoc, function (err, success) {
+      if (err) {
+        closeDB(db);
+        throw `Error updating in ${col}: ${err}`;
+      } else if (success) {
+        console.log('Updated Successfully');
+      } else {
+        console.log('No document found with defined search criteria!');
+      }
+      cb(db, ...args);
+    });
+  });
+};
 
-var testSearchObj = { "_id": ObjectId("5762df858b5383681afd8f2f") };
 
-// insertNewRecord(null,testRecipe, "recipes", findRecord, testSearchObj, "recipes");
-insertNewRecordAndVerify(null,testRecipe, "recipes");
 
-// findRecord(null, {"_id": ObjectId("5762df858b5383681afd8f2f")}, "recipes");
+// Different test cases:
+
+var testRecipe = {
+  // _id: 1,
+  ingredients: ["flour", "water", "yeast", "salt"],
+  recipeText: "mix, then bake"
+};
+var testRecipe2 = {
+  // _id: 3,
+  ingredients: ["flour", "water", "yeast", "salt"],
+  recipeText: "mix, then bake at 350"
+};
+
+var testSearchObj = { "_id": ObjectId("576333075f49b7f01d70a122") };
+// insertNewRecordAndVerify(null,testRecipe, "recipes");
 // findRecord(null, testSearchObj, "recipes");
-// findRecord(null, {"recipeText": 'mix, then bake'}, "recipes");
-
+updateRecord(null, testSearchObj, testRecipe2, "recipes", findRecord, testSearchObj, "recipes");
 
 
