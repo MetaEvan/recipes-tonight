@@ -1,0 +1,14 @@
+<div class="main-container" ng-init="main.initialize()">
+  <header class="header">
+    <h4>Recipes Tonight Header!</h2>
+    <span>
+      <a ui-sref="main.home">Home</a> 
+      <a ui-sref="main.newRecipe">Add A Recipe</a> 
+      <a ui-sref="main.results">See results</a> 
+      <a ui-sref="landing">Log Out</a>
+    </span>
+  </header>
+
+
+  <div ui-view="content"></div>
+</div>

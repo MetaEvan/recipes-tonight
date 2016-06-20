@@ -1,6 +1,8 @@
 var app = angular.module('rtApp', [
   'ui.router',
-  'rtApp.author'
+  'rtApp.author',
+  'rtApp.results',
+  'rtApp.newRecipe'
   ]);
 
 app.config(function($stateProvider, $urlRouterProvider) {
@@ -14,7 +16,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
       controllerAs: 'main',
       views: {
         "": {
-          templateUrl: "./app/landing/landing.html"
+          templateUrl: "app/landing/landingTemplate.html"
         }
       }
      })
@@ -24,7 +26,37 @@ app.config(function($stateProvider, $urlRouterProvider) {
       controllerAs: 'main',
       views: {
         "": {
-          templateUrl: "./app/main/main.html"
+          templateUrl: "app/main/mainTemplate.html"
+        }
+      }
+     })
+    .state('main.home', {
+      url: "/home",
+      controller: 'MainController',
+      controllerAs: 'main',
+      views: {
+        "content": {
+          templateUrl: "app/home/homeTemplate.html"
+        }
+      }
+     })
+    .state('main.newRecipe', {
+      url: "/newRecipe",
+      controller: 'NewRecipeController',
+      controllerAs: 'newRecipe',
+      views: {
+        "content": {
+          templateUrl: "app/newRecipe/newRecipeTemplate.html"
+        }
+      }
+     })
+    .state('main.results', {
+      url: "/results",
+      controller: 'ResultsController',
+      controllerAs: 'results',
+      views: {
+        "content": {
+          templateUrl: "app/results/resultsTemplate.html"
         }
       }
      })
