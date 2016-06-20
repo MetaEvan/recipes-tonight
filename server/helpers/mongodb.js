@@ -25,7 +25,7 @@ var closeDB = function(db) {
 
 var printObj = function(obj, iterator = 1) {
   console.log("iterator = " + iterator)
-  if (iterator > 2) return;
+  if (iterator > 3) return;
   if (typeof(obj) === "object" && obj !== null){
     for (let item in obj){
       console.log(`item = ${item}, obj[item] = ${obj[item]} (type ${typeof(obj[item])}), iterator = ${iterator}`)
@@ -125,4 +125,9 @@ var testSearchObj = { "_id": ObjectId("576333075f49b7f01d70a122") };
 // findRecord(null, testSearchObj, "recipes");
 updateRecord(null, testSearchObj, testRecipe2, "recipes", findRecord, testSearchObj, "recipes");
 
+
+// *******************************************************************************
+// Todo: Destructure function parameters --function({ stuff, otherStuff})--?
+// Todo: Making indices, smarter searching, returning multiple docs
+// Todo: Comment better
 
