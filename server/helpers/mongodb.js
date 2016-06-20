@@ -123,7 +123,7 @@ var testRecipe2 = {
 var testSearchObj = { "_id": ObjectId("576333075f49b7f01d70a122") };
 // insertNewRecordAndVerify(null,testRecipe, "recipes");
 // findRecord(null, testSearchObj, "recipes");
-updateRecord(null, testSearchObj, testRecipe2, "recipes", findRecord, testSearchObj, "recipes");
+// updateRecord(null, testSearchObj, testRecipe2, "recipes", findRecord, testSearchObj, "recipes");
 
 
 // *******************************************************************************

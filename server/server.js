@@ -6,6 +6,7 @@ var mongodb = require('./helpers/mongodb.js'); //database connect and functions
 app = express();
 
 // Local port for testing
+// Note: Heroku local is at 5000
 app.localPort = 8011;
 
 // Middleware to be moved?
