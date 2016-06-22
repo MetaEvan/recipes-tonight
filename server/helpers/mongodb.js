@@ -4,7 +4,7 @@ var ObjectId = require('mongodb').ObjectID;  //Turn on if you need the property 
 
 var dbUrl = `mongodb://${process.env.mLabUser}:${process.env.mLabPW}@ds025973.mlab.com:25973/rtdb`;
 
-
+var mongoHelper = {};
 
 var connectDB = function(cb = closeDB) {
   MongoClient.connect(dbUrl, function(err, db) {
@@ -131,3 +131,4 @@ var testSearchObj = { "_id": ObjectId("576333075f49b7f01d70a122") };
 // Todo: Making indices, smarter searching, returning multiple docs
 // Todo: Comment better
 
+module.exports = mongoHelper;

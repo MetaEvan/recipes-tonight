@@ -1,9 +1,18 @@
-<div>
+<div ng-controller="LandingController">
   
   <h1> Recipes Tonight! </h1>
-
+  <button ng-click="button()">Is there a user?</button>
+  <form name="loginForm" ng-submit="login()">
+    <label>
+      Email: <input type="text" name="user-email" ng-model="user.email" required>
+    </label>
+    <label>
+      Password: <input type="password" name="user-password" ng-model="user.password" required>
+    </label>
+    <button>Log In</button>
+  </form>
+  <button>Make a new account!</button>
   <p>
-      <a ui-sref="main">Log In</a>
     <br>
     Browse Existing Recipes<br>
     <br>

@@ -1,5 +1,4 @@
 var app = require('./server/server.js');
 
-app.listen(process.env.PORT || app.localPort, ()=> {
-  console.log(`Listening on port ${app.localPort}!`);
-});
+let activePort = process.env.PORT || app.localPort;
+app.listen(activePort, ()=> console.log(`Listening on port ${activePort}!`));

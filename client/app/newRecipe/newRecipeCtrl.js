@@ -1,6 +1,4 @@
-var newRecipe = angular.module("rtApp.newRecipe", []);
-
-newRecipe.controller("NewRecipeController", ["$state", function($state) {
+app.controller("NewRecipeController", ["$scope", function($scope) {
   
   var newRecipe = this;
 

@@ -1,13 +1,19 @@
-<div class="main-container" ng-init="main.initialize()">
+<div class="main-container">
   <header class="header">
     <h4>Recipes Tonight Header!</h2>
     <span>
       <a ui-sref="main.home">Home</a> 
       <a ui-sref="main.newRecipe">Add A Recipe</a> 
       <a ui-sref="main.results">See results</a> 
-      <a ui-sref="landing">Log Out</a>
+      <a ui-sref="landing">Landing</a>  <!--For testing only-->
+      <button ng-click="logout()">Log Out</button>
     </span>
+
   </header>
+
+  <input type="text" ng-model="data.text"/>
+    <!-- all changes from our Firebase database magically appear here! -->
+    <h3>You said: {{ data.Firebase }}</h3>
 
 
   <div ui-view="content"></div>

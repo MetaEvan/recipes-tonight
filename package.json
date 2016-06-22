@@ -22,7 +22,10 @@
   },
   "homepage": "https://github.com/MetaEvan/recipes-tonight#readme",
   "dependencies": {
+    "angular": "^1.5.7",
+    "angularfire": "^2.0.1",
     "express": "^4.13.4",
+    "firebase": "^3.0.5",
     "mongodb": "^2.1.18",
     "morgan": "^1.7.0"
   }

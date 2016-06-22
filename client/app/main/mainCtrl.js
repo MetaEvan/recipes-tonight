@@ -1,12 +1,15 @@
-app.controller("MainController", ["$state", function($state) {
+app.controller("MainController", ["$scope", "$state", "Authentication", function($scope, $state, Authentication) {
 
-  // Used for Landing and Home pages
+  // Used for logged-in pages
 
   var main = this;
 
-  // Initialization functions
+  $scope.logout = function() {
+    Authentication.logout;
+  }
+
+  // Initialization operations
   main.initialize = function() {
-    console.log("initialized")
-    $state.go("main.home");
+    console.log("MainCtrl initialized");
   }
 }]);

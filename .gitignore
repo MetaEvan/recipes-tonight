@@ -6,3 +6,4 @@ client/lib
 
 # Server Keys
 server/config/keys.js
+server/config/fbkeys.json

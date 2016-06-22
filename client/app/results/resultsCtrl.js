@@ -1,6 +1,4 @@
-var results = angular.module("rtApp.results", []);
-
-results.controller("ResultsController", ["$state", function($state) {
+app.controller("ResultsController", ["$scope", function($scope) {
   
   var results = this;
 
