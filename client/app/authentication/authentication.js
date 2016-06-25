@@ -19,18 +19,24 @@ var authApp = angular.module('authentication', [
 
   console.log(`Current User is ${$rootScope.currentUser || "no one"}`);
 
-  firebase.auth().onAuthStateChanged(function(user) {
-    console.log(`Current User is now ${user.email || "no one"}`);
-    $rootScope.currentUser = user;
-    if (user) {
-      // User is signed in.
-      console.log("user signed in")
-      $state.go("main.home");
-    } else {
-      // No user is signed in.
-      $rootScope.currentUser = firebase.auth().currentUser;
-      console.log("user signed out", user.email)
-      $state.go("landing");
-    }
-  });
+  if (!$rootScope.currentUser) {
+    $state.go('landing');
+  } else {
+
+    firebase.auth().onAuthStateChanged(function(user) {
+      console.log(`Current User is now ${user.email || "no one"}`);
+      $rootScope.currentUser = user;
+      if (user) {
+        // User is signed in.
+        console.log("user signed in")
+        $state.go("main.home");
+      } else {
+        // No user is signed in.
+        $rootScope.currentUser = firebase.auth().currentUser;
+        console.log("user signed out", user.email)
+        $state.go("main.home");
+      }
+    });
+
+  }
 }])

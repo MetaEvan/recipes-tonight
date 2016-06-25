@@ -1,6 +1,4 @@
-var author = angular.module('rtApp.author', []);
-
-author.directive('author', [function() {
+app.directive('author', [function() {
   return {
     restrict: 'E',
     replace: true,

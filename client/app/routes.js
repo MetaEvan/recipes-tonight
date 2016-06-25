@@ -41,7 +41,7 @@ app.config(function($stateProvider, $urlRouterProvider) {
         "content": {
           templateUrl: "app/newRecipe/newRecipeTemplate.html"
         }
-      }
+      },
      })
     .state('main.results', {
       url: "^/results",

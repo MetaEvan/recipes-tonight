@@ -5,7 +5,7 @@ app.controller("MainController", ["$scope", "$state", "Authentication", function
   var main = this;
 
   $scope.logout = function() {
-    Authentication.logout;
+    Authentication.logout();
   }
 
   // Initialization operations

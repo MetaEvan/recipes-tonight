@@ -3,6 +3,13 @@
     <input class="newRecipe">
 
     Insert a new recipe here:
+
+    <form name="add-recipe" ng-submit="addRecipe()">
+    <label>
+      Recipe Text: <input type="text" name="recipe-text" ng-model="recipe.text" required>
+    </label>
+    <button>Submit!</button>
+  </form>
     
   </div>
   <div>
