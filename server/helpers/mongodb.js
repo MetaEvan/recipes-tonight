@@ -4,7 +4,6 @@ var ObjectId = require('mongodb').ObjectID;  //Turn on if you need the property 
 
 var dbUrl = `mongodb://${process.env.mLabUser}:${process.env.mLabPW}@ds025973.mlab.com:25973/rtdb`;
 
-var mongoHelper = {};
 
 var connectDB = function(cb = closeDB) {
   MongoClient.connect(dbUrl, function(err, db) {
@@ -40,11 +39,14 @@ var printObj = function(obj, iterator = 1) {
 
 var insertNewRecord = function(db, doc, col, cb = closeDB, ...args) {
   connectDB(function(db) {
+    console.log(`doc, ${doc}, col, ${col}`);
     db.collection("recipes").insertOne(doc, function(err, result) {
       if (err) {
         closeDB(db);
         throw `Error inserting in ${col}: ${err}`;
       }
+      console.log(doc)
+      if (!doc) throw `Error inserting in ${col}`;
       let lastEnteredId = doc._id; 
       args.unshift(lastEnteredId, col); // could be useful.
       console.log(`Inserted doc ID: ${lastEnteredId}`);
@@ -131,4 +133,9 @@ var testSearchObj = { "_id": ObjectId("576333075f49b7f01d70a122") };
 // Todo: Making indices, smarter searching, returning multiple docs
 // Todo: Comment better
 
-module.exports = mongoHelper;
+
+module.exports = {
+  insertNewRecord,
+  findRecord,
+  updateRecord
+};

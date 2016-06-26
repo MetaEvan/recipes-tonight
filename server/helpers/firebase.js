@@ -11,6 +11,7 @@ ref.once("value", function(snapshot) {
   console.log(snapshot.val());
 });
 
+
 // let uid = "1";
 
 // var token = firebase.auth().createCustomToken(uid);
