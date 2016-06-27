@@ -1,13 +1,15 @@
 authApp.factory("Authentication", ["$rootScope", "$state", function($rootScope, $state) {
 
 
-  // let findCurrentUser = ()=> firebase.auth().currentUser;  //faster, but not always reliable.
+  let anonUser = {uid: "Anon00000000000000000002"}
 
-  let findCurrentUser = function(cb) {                        // I should really make this a promise
-    firebase.auth().onAuthStateChanged(function(user) {
-      $rootScope.currentUser = user;
-      return cb(user);
-    })
+  let findCurrentUser = function() {                        // I should really make this a promise
+    let user = firebase.auth().currentUser
+    if (!user) {
+      user = anonUser;
+    }
+     $rootScope.currentUser = user;
+     return user;
   };
 
   let login = function(email, pw) {
@@ -16,19 +18,22 @@ authApp.factory("Authentication", ["$rootScope", "$state", function($rootScope, 
       var errorCode = error.code;
       var errorMessage = error.message;
       console.log(errorCode, errorMessage);
-    })
-    firebase.auth().onAuthStateChanged(function(user) {
+
+    });
+    let authOff = firebase.auth().onAuthStateChanged(function(user) {
       $rootScope.currentUser = user;
       if (!user) {
         console.log(`Logged out`);
       } else {
-        console.log(`${user.email} logged in`);
+        console.log(`${user.uid} logged in`);
       }
+      authOff();
       $state.go('main.home')
     });
   }
 
   let logout = function() { firebase.auth().signOut().then(function() {
+    $rootScope.currentUser = anonUser;
       console.log("Signed out");
       $state.go("main.home");
     }, function(error) {

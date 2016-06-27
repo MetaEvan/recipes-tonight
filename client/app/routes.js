@@ -53,4 +53,25 @@ app.config(function($stateProvider, $urlRouterProvider) {
         }
       }
      })
+    .state('main.signup', {
+      url: "^/signup",
+      controller: 'SignupController',
+      controllerAs: 'signup',
+      views: {
+        "content": {
+          templateUrl: "app/signup/signupTemplate.html"
+        }
+      }
+     })
   });
+
+app.run(["$rootScope", "$state", "Authentication", function($rootScope, $state, Authentication) {
+  
+
+  $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams) {
+    if ($rootScope.currentUser !== Authentication.findCurrentUser()) {
+      $rootScope.currentUser = Authentication.findCurrentUser();
+      // Todo: This has a possible async error.  Test for it later.
+    }
+  });
+}]);
