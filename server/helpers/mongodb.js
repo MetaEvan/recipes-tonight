@@ -57,6 +57,23 @@ var insertNewRecord = function(db, doc, col, cb = closeDB, ...args) {
 };
 
 
+var addRecipe = function(doc, cbFromAR) {
+  insertNewRecord(null, doc, "recipes", function(db, docId) {
+    if (docId) {
+      let userId = doc.uploadedBy;
+      // addRecipeIdToUser(db, userId, docId, cbFromAR);
+      console.log(`userId is ${userId}`)
+    }
+    cbFromAR(db, docId);
+  });
+}
+
+var addUser = function(userDoc, cbFromAU) {
+  userDoc._id = ObjectId(userDoc.uid)
+  insertNewRecord(null, userDoc, "users", cbFromAU);
+}
+
+
 var insertNewRecordAndVerify = function(db, doc, col, cb = closeDB, ...args) {
   insertNewRecord(db, doc, col, findRecord);
 };
@@ -107,7 +124,13 @@ var updateRecord = function(db, searchTerms, revisedDoc, col, cb = closeDB, ...a
   });
 };
 
-
+// app.post("/addRecipe", function(req, res) {
+//   console.log(`Post addRecipe data: ${req.data}, body: ${req.body}`);
+//   mongodb.insertNewRecord(null, req.body, "recipes", function(db = null, recipeId) {
+//     res.status(201).send(recipeId);
+//     console.log(recipeId);
+//   })
+// });
 
 // Different test cases:
 
@@ -137,5 +160,7 @@ var testSearchObj = { "_id": ObjectId("576333075f49b7f01d70a122") };
 module.exports = {
   insertNewRecord,
   findRecord,
-  updateRecord
+  updateRecord,
+  addRecipe,
+  closeDB
 };

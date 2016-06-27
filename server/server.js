@@ -3,7 +3,7 @@ var bodyParser = require('body-parser');
 
 // Helper files
 var mongodb = require('./helpers/mongodb.js'); // database connect and functions
-var firebasedb = require('./helpers/firebase.js'); // firebase connect and functions
+// var firebasedb = require('./helpers/firebase.js'); // firebase connect and functions -- Currently not used serverside
 var middleware = require('./helpers/middleware.js'); // Middleware functions
 
 
@@ -19,11 +19,27 @@ app.use(bodyParser.json());                                     // parse applica
 app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse application/vnd.api+json as json
    
 
+// app.post("/addRecipe", function(req, res) {
+//   console.log(`Post addRecipe data: ${req.data}, body: ${req.body}`);
+//   mongodb.insertNewRecord(null, req.body, "recipes", function(db = null, recipeId) {
+//     res.status(201).send(recipeId);
+//     console.log(recipeId);
+//   })
+// });
+
 app.post("/addRecipe", function(req, res) {
   console.log(`Post addRecipe data: ${req.data}, body: ${req.body}`);
-  mongodb.insertNewRecord(null, req.body, "recipes", function(db = null, recipeId) {
+  mongodb.addRecipe(req.body, function(db = null, recipeId) {
     res.status(201).send(recipeId);
-    console.log(recipeId);
+    console.log(`Added recipeId is ${recipeId}`);
+  })
+});
+
+app.post("/addUser", function(req, res) {
+  console.log(`Post addRecipe data: ${req.data}, body: ${req.body}`);
+  mongodb.addUser(req.body, function(db = null, mongoUserID) {
+    res.status(201).send(mongoUserID);
+    console.log(`Added mongoUserID is ${mongoUserID}`);
   })
 });
 
