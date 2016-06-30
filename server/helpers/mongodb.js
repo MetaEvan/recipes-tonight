@@ -1,5 +1,5 @@
 var MongoClient = require('mongodb').MongoClient;
-var ObjectId = require('mongodb').ObjectID;  //Turn on if you need the property explicitly
+var ObjectId = require('mongodb').ObjectID;  
 
 
 var dbUrl = `mongodb://${process.env.mLabUser}:${process.env.mLabPW}@ds025973.mlab.com:25973/rtdb`;
@@ -21,7 +21,8 @@ var closeDB = function(db) {
   console.log("Database closed");
 };
 
-
+// Helper to view objects displayed in console logs to terminal.
+// Obviously brute forced and not optimized, but still useful
 var printObj = function(obj, iterator = 1) {
   console.log("iterator = " + iterator)
   if (iterator > 3) return;
@@ -61,7 +62,7 @@ var addRecipe = function(doc, cb = closeDB) {
   insertNewRecord(null, doc, "recipes", function(db, docId) {
     if (docId) {
       let userId = doc.uploadedBy;
-      console.log(`userId is ${userId}`);
+      console.log(`In addRecipe, userId is ${userId}`);
       addRecipeIdToUser(db, userId, docId, cb);
     } else {
       console.log(`Error adding recipe`);
@@ -71,35 +72,22 @@ var addRecipe = function(doc, cb = closeDB) {
 }
 
 var addRecipeIdToUser = function(db, userId, docId, cb = closeDB) {
-  findRecord(db, userId, "users", function(db, results) {
-    if(!results.length) {
-      let newUserDoc = userSchema;
-      newUserDoc._id = ObjectId(userId);
-      newUserDoc.lastLogin = Date.now();
-      newUserDoc.totalLogins = 1;
-      newUserDoc.recipes.push(docId);
-      addUser(db, newUserDoc, cb)
-    } else {
-      let revisedUserDoc = results[0];
-      console.log(revisedUserDoc);
-      revisedUserDoc.lastLogin = Date.now();
-      revisedUserDoc.totalLogins++;
-      revisedUserDoc.recipes.push(docId);
-      reviseUser(db, userId, revisedUserDoc, cb)
-    }
-  });
+  let userIdObj = { _id: userId };
+  let revision = {
+    $currentDate: { lastModified: true },
+    $addToSet: { recipes: docId },
+    $inc: { totalActions: 1 },
+    $setOnInsert: { dateAdded: Date.now() }
+  };
+  let options = { 
+    update: true,
+    new: true,
+    upsert: true
+  };
+  let sort = [];
+  findAndModDB(db, userIdObj, sort, revision, options, "users", cb);
 }
 
-var addUser = function(db, userDoc, cbFromAU) {
-  if (!userDoc._id) {
-    userDoc._id = ObjectId(userDoc.uid)
-  }
-  insertNewRecord(db, userDoc, "users", cbFromAU);
-}
-
-var reviseUser = function(db, userId, revisedUserDoc, cb) {
-  updateRecord(db, userId, revisedUserDoc, "users", cb);
-}
 
 
 var searchDB = function(db, searchTerms, col, cb = closeDB, ...args) {
@@ -131,38 +119,68 @@ var findRecord = function(db, searchTerms, col, cb = closeDB, ...args) {
   }
 };
 
-var updateRecord = function(db, searchTerms, revisedDoc, col, cb = closeDB, ...args) {
+var updateDB = function(db, searchTerms, revision, col, cb = closeDB, ...args) {
+  db.collection(col).update(searchTerms, revision, function (err, success) {
+    if (err) {
+      closeDB(db);
+      throw `Error updating in ${col}: ${err}`;
+    } else if (success) {
+      console.log(`Updated ${searchTerms} in ${col} successfully`);
+    } else {
+      console.log(`Error: ${searchTerms} in ${col} not found`);
+    }
+    cb(db, ...args);
+  });
+};
+
+var findAndModDB = function(db, query, sort, revision, options, col, cb = closeDB, ...args) {
+  db.collection(col).findAndModify(query, sort, revision, options, function (err, results) {
+    console.log(`results in F&findAndModDB, ${results.value}`);
+    if (err) {
+      closeDB(db);
+      throw `Error updating in ${col}: ${err}`;
+    } else if (results) {
+      console.log(`Updated ${results.value._id} in ${col} successfully`);
+    } else {
+      console.log(`Error: ${query} in ${col} not found`);
+    }
+    args.unshift(results.value);
+    cb(db, ...args);
+  });
+};
+
+
+
+var updateRecord = function(db, searchTerms, revision, col, cb = closeDB, ...args) {
   if (typeof(searchTerms) === "string") {  //should only trigger if looking for document id
     searchTerms = {"_id":ObjectId(searchTerms)};
   }
   if(db) {
-    db.collection(col).update(searchTerms, revisedDoc, function (err, success) {
-        if (err) {
-          closeDB(db);
-          throw `Error updating in ${col}: ${err}`;
-        } else if (success) {
-          console.log('Updated Successfully');
-        } else {
-          console.log('No document found with defined search criteria!');
-        }
-        cb(db, ...args);
-      });
+    updateDB(db, searchTerms, revision, col, cb, ...args);
   } else {                                  // Todo: Probably can delete this branch later.  
     connectDB(function(db) {
-      db.collection(col).update(searchTerms, revisedDoc, function (err, success) {
-        if (err) {
-          closeDB(db);
-          throw `Error updating in ${col}: ${err}`;
-        } else if (success) {
-          console.log('Updated Successfully');
-        } else {
-          console.log('No document found with defined search criteria!');
-        }
-        cb(db, ...args);
-      });
+      updateDB(db, searchTerms, revision, col, cb, ...args);
     });
   }
 };
+
+// For use to create users client-side, instead of when their first recipe is posted, as happens now.
+
+// var addUser = function(db, userDoc, cb) {
+//   if (!userDoc._id) {
+//     userDoc._id = ObjectId(userDoc.uid)
+//   }
+//   insertNewRecord(db, userDoc, "users", cb);
+// }
+
+// var reviseUser = function(db, userId, revisedUserDoc, cb) {
+//   if (!userDoc._id) {
+//     userDoc._id = ObjectId(userDoc.uid)
+//   }
+//   updateRecord(db, userId, revisedUserDoc, "users", cb);
+// }
+
+
 
 // app.post("/addRecipe", function(req, res) {
 //   console.log(`Post addRecipe data: ${req.data}, body: ${req.body}`);
@@ -179,10 +197,18 @@ var testRecipe = {
   ingredients: ["flour", "water", "yeast", "salt"],
   recipeText: "mix, then bake"
 };
-var testRecipe3 = {
+var testRecipe2 = {
   // _id: 3,
   ingredients: ["flour", "water", "yeast", "salt"],
   recipeText: "mix, wait, then bake at 350",
+  dateAdded: Date.now(),
+  uploadedBy: "416e6f6e3030303030303034"
+};
+
+var testRecipe3 = {
+  // _id: 3,
+  ingredients: ["peanut butter", "bread"],
+  recipeText: "spread pb on bread",
   dateAdded: Date.now(),
   uploadedBy: "416e6f6e3030303030303034"
 };
@@ -193,8 +219,8 @@ var userSchema = {
     email: "",
     _id: "",
     name: "",
-    lastLogin: 0,
-    totalLogins: 0,
+    dateModified: 0,
+    totalActions: 0,
     recipes: [],
     dateAdded: 0,
     locationAdded: "",
@@ -203,12 +229,13 @@ var userSchema = {
 // findRecord(null, testSearchObj, "recipes");
 // updateRecord(null, testSearchObj, testRecipe2, "recipes", findRecord, testSearchObj, "recipes");
 // addRecipeIdToUser(null, "416e6f6e3030303030303034", "57717577fe2c61b854773f9e");
-addRecipe(testRecipe3);
-
+// addRecipe(testRecipe2);
+// addRecipe(testRecipe2, function(){ addRecipe(testRecipe3) });
 
 // *******************************************************************************
 // Todo: Destructure function parameters --function({ stuff, otherStuff})--?
 // Todo: Making indices, smarter searching, returning multiple docs
+// Todo: Who can edit whose docs? --Add security.
 // Todo: Comment better
 
 

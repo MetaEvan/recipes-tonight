@@ -28,20 +28,25 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse applica
 // });
 
 app.post("/addRecipe", function(req, res) {
-  console.log(`Post addRecipe data: ${req.data}, body: ${req.body}`);
-  mongodb.addRecipe(req.body, function(db = null, recipeId) {
+  console.log(`Post addRecipe body: ${req.body}`);
+  mongodb.addRecipe(req.body, function(db, userEntry) {
+    console.log(`result: ${userEntry}, recipes ${userEntry.recipes}`)
+    let recipeId = userEntry.recipes.pop();
     res.status(201).send(recipeId);
     console.log(`Added recipeId is ${recipeId}`);
   })
 });
 
-app.post("/addUser", function(req, res) {
-  console.log(`Post addRecipe data: ${req.data}, body: ${req.body}`);
-  mongodb.addUser(req.body, function(db = null, mongoUserID) {
-    res.status(201).send(mongoUserID);
-    console.log(`Added mongoUserID is ${mongoUserID}`);
-  })
-});
+
+// Not currently planned for use
+
+// app.post("/addUser", function(req, res) {
+//   console.log(`Post addRecipe body: ${req.body}`);
+//   mongodb.addUser(req.body, function(db, mongoUserID) {
+//     res.status(201).send(mongoUserID);
+//     console.log(`Added mongoUserID is ${mongoUserID}`);
+//   })
+// });
 
 app.get('/test', function(req, res) {
   res.send('hello tester');
