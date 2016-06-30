@@ -3,6 +3,9 @@
   "version": "0.0.2",
   "description": "A searchable recipe binder app",
   "main": "index.js",
+  "engines": {
+    "node": "6.2.1"
+  },
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -25,9 +28,9 @@
     "angular": "^1.5.7",
     "angularfire": "^2.0.1",
     "body-parser": "^1.15.2",
-    "express": "^4.13.4",
-    "firebase": "^3.0.5",
-    "mongodb": "^2.1.18",
+    "express": "^4.14.0",
+    "firebase": "^3.1.0",
+    "mongodb": "^2.1.21",
     "morgan": "^1.7.0"
   }
 }

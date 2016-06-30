@@ -15,6 +15,8 @@ app.localPort = 8011;
 
 if (!process.env.PORT) {
   keys = require('./config/keys.js');
+} else {
+  
 }
 
 app.use(express.static(__dirname + '/../client')); 
