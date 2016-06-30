@@ -3,6 +3,7 @@
 .env
 node_modules/
 client/lib
+npm-debug.log
 
 # Server Keys
 server/config/keys.js

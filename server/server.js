@@ -4,7 +4,7 @@ var bodyParser = require('body-parser');
 // Helper files
 var mongodb = require('./helpers/mongodb.js'); // database connect and functions
 // var firebasedb = require('./helpers/firebase.js'); // firebase connect and functions -- Currently not used serverside
-var middleware = require('./helpers/middleware.js'); // Middleware functions
+// var middleware = require('./helpers/middleware.js'); // Middleware functions
 
 
 app = express();
@@ -12,6 +12,10 @@ app = express();
 // Local port for testing
 // Note: Heroku local is at 5000
 app.localPort = 8011;
+
+if (!process.env.PORT) {
+  keys = require('./config/keys.js');
+}
 
 app.use(express.static(__dirname + '/../client')); 
 app.use(bodyParser.urlencoded({'extended':'true'}));            // parse application/x-www-form-urlencoded
