@@ -38,6 +38,14 @@ app.post("/addRecipe", function(req, res) {
 });
 
 
+app.post("/findRecipes", function(req, res) {
+  console.log(`Post findRecipes body: ${req.body}`);
+  mongodb.findRecipes(req.body, function(db, results) {
+    console.log(`results: ${results}`)
+    res.status(201).send(results);
+  })
+});
+
 // Not currently planned for use
 
 // app.post("/addUser", function(req, res) {
@@ -52,7 +60,7 @@ app.get('/test', function(req, res) {
   res.send('hello tester');
 });
 
-app.post('/', function (req, res) {
+app.post('/', function(req, res) {
   res.send('POST request to the homepage');
 });
 

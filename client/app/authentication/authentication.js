@@ -25,9 +25,8 @@ var authApp = angular.module('authentication', [
     console.log(`Current User is ${$rootScope.currentUser.uid || "no one"} on authentication initiation`);
     $rootScope.offAuth();
   })
-
-
 }])
+
 
 // Depricated
   // if (!$rootScope.currentUser) {

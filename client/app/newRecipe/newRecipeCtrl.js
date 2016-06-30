@@ -2,7 +2,7 @@ app.controller("NewRecipeController", ["$scope", "$http", function($scope, $http
 
   $scope.newRecipe = {
     ingredients: [],
-    text: "",
+    recipeText: "",
     totalTime: 0,
     activeTime: 0,
     source: "",
@@ -27,7 +27,7 @@ app.controller("NewRecipeController", ["$scope", "$http", function($scope, $http
       method: "POST",
       data: $scope.newRecipe
     }).then(function(res) {
-      console.log(`addRecipe response added recipe docId: ${res.data}`);
+      console.log(`addRecipe response added recipe with docId: ${res.data}`);
     }, function(err) {
       console.log(`Error adding recipe: ${err.data}`)
     })

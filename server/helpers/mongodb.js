@@ -88,19 +88,32 @@ var addRecipeIdToUser = function(db, userId, docId, cb = closeDB) {
   findAndModDB(db, userIdObj, sort, revision, options, "users", cb);
 }
 
-
+var findRecipes = function(searchRequest, cb) {
+  let searchTerms = {
+    $text: { $search: searchRequest.recipeText } // Todo: Break up the text differently?
+  };
+  if (searchRequest.uid) {
+    searchTerms.uploadedBy = searchRequest.uid;
+  }
+  console.log(`searchTerms in findRecipes: ${searchTerms}`)
+  connectDB(function(db) {
+    searchDB(db, searchTerms, "recipes", function(db, results) {
+      cb(db, results);
+    })
+  });
+}
 
 var searchDB = function(db, searchTerms, col, cb = closeDB, ...args) {
-  db.collection(col).find(searchTerms).toArray(function(err, result) {
+  db.collection(col).find(searchTerms).toArray(function(err, results) {
     if (err) {
       closeDB(db);
       throw `Error searching in ${col}: ${err}`;
-    } else if (result.length) {
-      console.log('searchDB found:', result);
+    } else if (results.length) {
+      console.log('searchDB found:', results);
     } else {
       console.log('No document(s) found with defined search criteria!');
     }  
-    cb(db, result, ...args);
+    cb(db, results, ...args);
   });
 };
 
@@ -120,7 +133,7 @@ var findRecord = function(db, searchTerms, col, cb = closeDB, ...args) {
 };
 
 var updateDB = function(db, searchTerms, revision, col, cb = closeDB, ...args) {
-  db.collection(col).update(searchTerms, revision, function (err, success) {
+  db.collection(col).update(searchTerms, revision, function(err, success) {
     if (err) {
       closeDB(db);
       throw `Error updating in ${col}: ${err}`;
@@ -134,7 +147,7 @@ var updateDB = function(db, searchTerms, revision, col, cb = closeDB, ...args) {
 };
 
 var findAndModDB = function(db, query, sort, revision, options, col, cb = closeDB, ...args) {
-  db.collection(col).findAndModify(query, sort, revision, options, function (err, results) {
+  db.collection(col).findAndModify(query, sort, revision, options, function(err, results) {
     console.log(`results in F&findAndModDB, ${results.value}`);
     if (err) {
       closeDB(db);
@@ -244,5 +257,6 @@ module.exports = {
   findRecord,
   updateRecord,
   addRecipe,
+  findRecipes,
   closeDB
 };

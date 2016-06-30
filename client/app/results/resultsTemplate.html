@@ -1,3 +1,28 @@
 <div class="results-container" ng-controller="ResultsController as results">
+
+  <h3>Find a recipe<span ng-hide="loggedIn"> from other users</span>:</h3>
+  <form name="find-recipes" ng-submit="findRecipes()">
+      <label>
+        Recipe Text: <input type="text" name="recipe-search-text" ng-model="find.searchText" required>
+      </label>
+      <div ng-show="loggedIn">
+        <label>
+          <input type="radio" ng-model="find.onlyOwn" value="true">
+          Just my recipes!
+        </label><br/>
+        <label>
+          <input type="radio" ng-model="find.onlyOwn" value="false">
+          Everyone's recipes!
+        </label><br/>
+      </div>
+      <button>Submit!</button>
+    </form>
   Here are your recipe results:
+  <table border="1">
+    <tr ng-repeat="recipe in searchResults">
+      <td>{{recipe.recipeText}}</td>
+      <td>{{recipe.uploadedBy}}</td>
+      <td>{{recipe.dateAdded}}</td>
+    </tr>
+  </table>
 </div>
