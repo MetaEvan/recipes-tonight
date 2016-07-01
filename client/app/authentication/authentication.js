@@ -20,7 +20,7 @@ var authApp = angular.module('authentication', [
   $rootScope.offAuth = firebase.auth().onAuthStateChanged(function(user) {
     $rootScope.currentUser = user;
     if (!user) {
-      $rootScope.currentUser = {uid: "Anon00000000000000000003"}
+      $rootScope.currentUser = {uid: null}
     }
     console.log(`Current User is ${$rootScope.currentUser.uid || "no one"} on authentication initiation`);
     $rootScope.offAuth();

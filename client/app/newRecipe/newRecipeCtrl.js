@@ -14,13 +14,14 @@ app.controller("NewRecipeController", ["$scope", "$http", function($scope, $http
 
   $scope.addRecipe = function(){
     $scope.newRecipe.dateAdded = Date.now();
-    if ($scope.currentUser) {
+    if ($scope.currentUser && $scope.currentUser.uid) {
       $scope.newRecipe.uploadedBy = $scope.currentUser.uid;
     } else {
       $scope.newRecipe.uploadedBy = "Anon00000000000000000001"
     }
 
     alert("Recipe Submitted!")
+    consle.log(scope.newRecipe, `submitted`)
 
     $http({
       url: "/addRecipe",

@@ -1,13 +1,14 @@
 <div class="newRecipe-container" ng-controller="NewRecipeController as newRecipe">
   <div>
-    <input class="newRecipe">
 
     Insert a new recipe here:
 
     <form name="add-recipe" ng-submit="addRecipe()">
       <label>
-        Recipe Text: <input type="text" name="recipe-text" ng-model="newRecipe.recipeText" required>
-      </label>
+        <textarea name="recipe-text" ng-model="newRecipe.recipeText" ng-required="string">
+        </textarea>
+      </label></br>
+      <label>Let others view this recipe: <input type="checkbox" ng-model="newRecipe.public"></label></br>
       <button>Submit!</button>
     </form>
     

@@ -8,7 +8,7 @@ app.controller("ResultsController", ["$http", "$scope", function($http, $scope) 
 
   $scope.searchResults = [];
 
-  if($scope.currentUser) {
+  if($scope.currentUser.uid) {
     $scope.loggedIn = true;
     $scope.find.onlyOwn = true;
   }
@@ -16,15 +16,18 @@ app.controller("ResultsController", ["$http", "$scope", function($http, $scope) 
 
   $scope.findRecipes = function(){
     let searchTerms = {
-      recipeText: $scope.find.searchText
+      recipeText: $scope.find.searchText,
+      onlyOwn: $scope.find.onlyOwn
     };
-    if ($scope.find.onlyOwn) {
+    if ($scope.currentUser.uid) {
       searchTerms.uid = $scope.currentUser.uid;
     } else {
       searchTerms.uid = null;
     }
 
     alert("Search Request Submitted!")
+    console.log(searchTerms, "Submitted")
+
 
     $http({
       url: "/findRecipes",

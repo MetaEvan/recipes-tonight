@@ -40,6 +40,7 @@ app.post("/addRecipe", function(req, res) {
     let recipeId = userEntry.recipes.pop();
     res.status(201).send(recipeId);
     console.log(`Added recipeId is ${recipeId}`);
+    mongodb.closeDB(db);
   })
 });
 
@@ -47,8 +48,9 @@ app.post("/addRecipe", function(req, res) {
 app.post("/findRecipes", function(req, res) {
   console.log(`Post findRecipes body: ${req.body}`);
   mongodb.findRecipes(req.body, function(db, results) {
-    console.log(`results: ${results}`)
+    console.log(`findRecipes results: ${results}`)
     res.status(201).send(results);
+    mongodb.closeDB(db);
   })
 });
 

@@ -6,14 +6,10 @@
         Recipe Text: <input type="text" name="recipe-search-text" ng-model="find.searchText" required>
       </label>
       <div ng-show="loggedIn">
-        <label>
-          <input type="radio" ng-model="find.onlyOwn" value="true">
-          Just my recipes!
-        </label><br/>
-        <label>
-          <input type="radio" ng-model="find.onlyOwn" value="false">
-          Everyone's recipes!
-        </label><br/>
+        <input type="radio" ng-model="find.onlyOwn" ng-value=true>
+        <label>Just my recipes!</label><br/>
+        <input type="radio" ng-model="find.onlyOwn" ng-value=false>
+        <label>Everyone's recipes!</label><br/>
       </div>
       <button>Submit!</button>
     </form>

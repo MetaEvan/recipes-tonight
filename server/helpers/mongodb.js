@@ -88,18 +88,26 @@ var addRecipeIdToUser = function(db, userId, docId, cb = closeDB) {
   findAndModDB(db, userIdObj, sort, revision, options, "users", cb);
 }
 
-var findRecipes = function(searchRequest, cb) {
+var findRecipes = function(searchRequest, cb) {       // Text Index was created in MongoDB for this to work
   let searchTerms = {
-    $text: { $search: searchRequest.recipeText } // Todo: Break up the text differently?
+    $text: { $search: searchRequest.recipeText }     // True in each case
   };
-  if (searchRequest.uid) {
+
+  if (!searchRequest.uid) {                           // If a not-logged-in user is searching
+    searchTerms.public = true;
+  } else if (searchRequest.onlyOwn) {                 // If the user only wants their own recipes
     searchTerms.uploadedBy = searchRequest.uid;
+  } else {                                            // if the user wants all available recipes
+    searchTerms.$or = [
+      { "public": true },
+      { "uploadedBy": searchRequest.uid }
+    ]
+    
   }
-  console.log(`searchTerms in findRecipes: ${searchTerms}`)
+  console.log(`Conditional searchTerms in findRecipes:`, searchTerms);
+
   connectDB(function(db) {
-    searchDB(db, searchTerms, "recipes", function(db, results) {
-      cb(db, results);
-    })
+    searchDB(db, searchTerms, "recipes", cb);
   });
 }
 
@@ -177,7 +185,8 @@ var updateRecord = function(db, searchTerms, revision, col, cb = closeDB, ...arg
   }
 };
 
-// For use to create users client-side, instead of when their first recipe is posted, as happens now.
+// The following two functions to create users client-side, 
+// instead of when their first recipe is posted, as happens now.
 
 // var addUser = function(db, userDoc, cb) {
 //   if (!userDoc._id) {
@@ -193,15 +202,6 @@ var updateRecord = function(db, searchTerms, revision, col, cb = closeDB, ...arg
 //   updateRecord(db, userId, revisedUserDoc, "users", cb);
 // }
 
-
-
-// app.post("/addRecipe", function(req, res) {
-//   console.log(`Post addRecipe data: ${req.data}, body: ${req.body}`);
-//   mongodb.insertNewRecord(null, req.body, "recipes", function(db = null, recipeId) {
-//     res.status(201).send(recipeId);
-//     console.log(recipeId);
-//   })
-// });
 
 // Different test cases:
 
