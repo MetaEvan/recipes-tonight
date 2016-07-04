@@ -1,9 +1,9 @@
 authApp.factory("Authentication", ["$rootScope", "$state", function($rootScope, $state) {
 
 
-  let anonUser = {uid: "Anon00000000000000000002"}
+  let anonUser = {uid: null}
 
-  let findCurrentUser = function() {                        // I should really make this a promise
+  let findCurrentUser = function() {             // Todo: Make this a promise & use the async method
     let user = firebase.auth().currentUser
     if (!user) {
       user = anonUser;

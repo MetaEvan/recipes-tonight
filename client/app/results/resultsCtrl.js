@@ -25,9 +25,8 @@ app.controller("ResultsController", ["$http", "$scope", function($http, $scope) 
       searchTerms.uid = null;
     }
 
-    alert("Search Request Submitted!")
+    alert("Search Request Submitted!")  // Todo: switch this out for an appropriate reset()
     console.log(searchTerms, "Submitted")
-
 
     $http({
       url: "/findRecipes",
@@ -37,9 +36,34 @@ app.controller("ResultsController", ["$http", "$scope", function($http, $scope) 
       console.log(`findRecipes response: ${res.data}`);
       $scope.displayRecipes(res.data);
     }, function(err) {
-      console.log(`Error adding recipe: ${err.data}`)
+      console.log(`Error finding recipes: ${err.data}`)
     })
+  }
 
+  $scope.allRecipes = function(){
+    let searchTerms = {
+      recipeText: $scope.find.searchText,
+      onlyOwn: $scope.find.onlyOwn
+    };
+    if ($scope.currentUser.uid) {
+      searchTerms.uid = $scope.currentUser.uid;
+    } else {
+      searchTerms.uid = null;
+    }
+
+    alert("all recipe request Submitted!")  // Todo: switch this out for an appropriate reset()
+    console.log(searchTerms, "Submitted")
+
+    $http({
+      url: "/allRecipes",
+      method: "POST",
+      data: searchTerms
+    }).then(function(res) {
+      console.log(`allRecipes response: ${res.data}`);
+      $scope.displayRecipes(res.data);
+    }, function(err) {
+      console.log(`Error getting all recipes: ${err.data}`)
+    })
   }
 
   $scope.displayRecipes = function(searchResults) {

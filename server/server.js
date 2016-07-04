@@ -34,9 +34,9 @@ app.use(bodyParser.json({ type: 'application/vnd.api+json' })); // parse applica
 // });
 
 app.post("/addRecipe", function(req, res) {
-  console.log(`Post addRecipe body: ${req.body}`);
+  console.log(`Post addRecipe body:`, req.body);
   mongodb.addRecipe(req.body, function(db, userEntry) {
-    console.log(`result: ${userEntry}, recipes ${userEntry.recipes}`)
+    console.log(`result recipes`, userEntry.recipes)
     let recipeId = userEntry.recipes.pop();
     res.status(201).send(recipeId);
     console.log(`Added recipeId is ${recipeId}`);
@@ -46,9 +46,20 @@ app.post("/addRecipe", function(req, res) {
 
 
 app.post("/findRecipes", function(req, res) {
-  console.log(`Post findRecipes body: ${req.body}`);
+  console.log(`Post findRecipes body:`, req.body);
   mongodb.findRecipes(req.body, function(db, results) {
-    console.log(`findRecipes results: ${results}`)
+    console.log(`findRecipes results:`, results)
+    res.status(201).send(results);
+    mongodb.closeDB(db);
+  })
+});
+
+
+
+app.post("/allRecipes", function(req, res) {    //only usable until the db gets to be a certain (far off) size
+  console.log(`all recipes requested`, req.body);
+  mongodb.allRecipes(req.body, function(db, results) {
+    console.log(`all recipes:`, results)
     res.status(201).send(results);
     mongodb.closeDB(db);
   })

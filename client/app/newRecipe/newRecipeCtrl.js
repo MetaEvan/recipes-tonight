@@ -20,7 +20,7 @@ app.controller("NewRecipeController", ["$scope", "$http", function($scope, $http
       $scope.newRecipe.uploadedBy = "Anon00000000000000000001"
     }
 
-    alert("Recipe Submitted!")
+    alert("Recipe Submitted!")   // Todo: switch this out for an appropriate reset()
     consle.log(scope.newRecipe, `submitted`)
 
     $http({

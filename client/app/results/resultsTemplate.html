@@ -1,10 +1,11 @@
 <div class="results-container" ng-controller="ResultsController as results">
 
   <h3>Find a recipe<span ng-hide="loggedIn"> from other users</span>:</h3>
-  <form name="find-recipes" ng-submit="findRecipes()">
-      <label>
-        Recipe Text: <input type="text" name="recipe-search-text" ng-model="find.searchText" required>
-      </label>
+  <div>
+    <form name="find-recipes" ng-submit="findRecipes()">
+      <label>Recipe Text: </label>
+      <input type="text" name="recipe-search-text" ng-model="find.searchText" required>
+      
       <div ng-show="loggedIn">
         <input type="radio" ng-model="find.onlyOwn" ng-value=true>
         <label>Just my recipes!</label><br/>
@@ -13,6 +14,13 @@
       </div>
       <button>Submit!</button>
     </form>
+  </div>
+    <div>
+      <form>
+        <button ng-click="allRecipes()">Get all available recipes!</button>
+      </form>
+    </div>
+
   Here are your recipe results:
   <table border="1">
     <tr ng-repeat="recipe in searchResults">

@@ -88,21 +88,27 @@ var addRecipeIdToUser = function(db, userId, docId, cb = closeDB) {
   findAndModDB(db, userIdObj, sort, revision, options, "users", cb);
 }
 
-var findRecipes = function(searchRequest, cb) {       // Text Index was created in MongoDB for this to work
-  let searchTerms = {
-    $text: { $search: searchRequest.recipeText }     // True in each case
-  };
+var findRecipes = function(searchRequest, cb) {       // Text Index  on recipeText was created in MongoDB for this to work
+  let searchTerms = {};
 
   if (!searchRequest.uid) {                           // If a not-logged-in user is searching
-    searchTerms.public = true;
+    searchTerms = {
+      public: true,
+      $text: { $search: searchRequest.recipeText }
+    }
   } else if (searchRequest.onlyOwn) {                 // If the user only wants their own recipes
-    searchTerms.uploadedBy = searchRequest.uid;
+    searchTerms = {
+      uploadedBy: searchRequest.uid,
+      $text: { $search: searchRequest.recipeText }
+    }
   } else {                                            // if the user wants all available recipes
-    searchTerms.$or = [
-      { "public": true },
-      { "uploadedBy": searchRequest.uid }
-    ]
-    
+    searchTerms = {
+      $or: [
+        { public: true },
+        { uploadedBy: searchRequest.uid }
+      ],
+      $text: { $search: searchRequest.recipeText }
+    }
   }
   console.log(`Conditional searchTerms in findRecipes:`, searchTerms);
 
@@ -110,6 +116,34 @@ var findRecipes = function(searchRequest, cb) {       // Text Index was created 
     searchDB(db, searchTerms, "recipes", cb);
   });
 }
+
+var allRecipes = function(searchRequest, cb) {
+  let searchTerms = {};
+
+  if (!searchRequest.uid) {                           // If a not-logged-in user is searching
+    searchTerms = {
+      public: true
+    }
+  } else if (searchRequest.onlyOwn) {                 // If the user only wants their own recipes
+    searchTerms = {
+      uploadedBy: searchRequest.uid
+    }
+  } else {                                            // if the user wants all available recipes
+    searchTerms = {
+      $or: [
+        { public: true },
+        { uploadedBy: searchRequest.uid }
+      ]
+    }
+  }
+  console.log(`Conditional searchTerms in allRecipes:`, searchTerms);
+
+  connectDB(function(db) {
+    searchDB(db, searchTerms, "recipes", cb);
+  });
+}
+
+
 
 var searchDB = function(db, searchTerms, col, cb = closeDB, ...args) {
   db.collection(col).find(searchTerms).toArray(function(err, results) {
@@ -170,8 +204,6 @@ var findAndModDB = function(db, query, sort, revision, options, col, cb = closeD
   });
 };
 
-
-
 var updateRecord = function(db, searchTerms, revision, col, cb = closeDB, ...args) {
   if (typeof(searchTerms) === "string") {  //should only trigger if looking for document id
     searchTerms = {"_id":ObjectId(searchTerms)};
@@ -200,6 +232,54 @@ var updateRecord = function(db, searchTerms, revision, col, cb = closeDB, ...arg
 //     userDoc._id = ObjectId(userDoc.uid)
 //   }
 //   updateRecord(db, userId, revisedUserDoc, "users", cb);
+// }
+
+
+
+
+
+// Deprecated until I figure out how to get around the lack of $sample from mLab's Mongod 3.0 usage:
+// var randomRecipe = function(searchRequest, cb) {  
+//   let searchTerms = {};
+
+//   if (!searchRequest.uid) {                           // If a not-logged-in user is searching
+//     searchTerms = [
+//       { $match: { public: true } }, 
+//       { $sample: { size: 1 } }
+//     ]
+//   } else if (searchRequest.onlyOwn) {                 // If the user only wants their own recipes
+//     searchTerms = [
+//       { $match: { uploadedBy: searchRequest.uid } },
+//       { $sample: { size: 1 } }
+//     ]
+//   } else {                                            // If the user wants all available recipes
+//     searchTerms = [
+//       { 
+//         $match: {
+//           $or: [
+//             { public: true },
+//             { uploadedBy: searchRequest.uid }
+//           ]
+//         } 
+//       },
+//      { $sample: { size: 1 } }
+//     ]
+//   }
+//   console.log(`Conditional searchTerms in findRecipes:`, searchTerms);
+
+//   connectDB(function(db) {                          // searchDB cannot be used since $sample requires an aggregate search
+//     db.collection("recipes").aggregate(searchTerms).toArray(function(err, results) {
+//       if (err) {
+//         closeDB(db);
+//         throw `Error searching in recipes: ${err}`;
+//       } else if (results.length) {
+//         console.log('searchDB found:', results);
+//       } else {
+//         console.log('No document(s) found with defined search criteria!');
+//       }  
+//       cb(db, results);
+//     });
+//   })
 // }
 
 
@@ -250,6 +330,7 @@ var userSchema = {
 // Todo: Making indices, smarter searching, returning multiple docs
 // Todo: Who can edit whose docs? --Add security.
 // Todo: Comment better
+// Todo: figure out how to efficiently get a random recipe since $sample doesn't work with the mongod 3.0 that mLab uses
 
 
 module.exports = {
@@ -258,5 +339,6 @@ module.exports = {
   updateRecord,
   addRecipe,
   findRecipes,
+  allRecipes,
   closeDB
 };
