@@ -3,6 +3,7 @@
 .env
 node_modules/
 client/lib
+client/assets/images/fullSize
 npm-debug.log
 
 # Server Keys

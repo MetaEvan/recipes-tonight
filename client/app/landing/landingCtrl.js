@@ -16,12 +16,6 @@ app.controller("LandingController", ["$scope", "Authentication", function($scope
   $scope.login = function() {
     console.log("Landing Login")
     Authentication.login($scope.user.email, $scope.user.password);
-    // firebase.auth().signInWithEmailAndPassword($scope.user.email, $scope.user.password).catch(function(error) {
-    //   // Handle Errors here.
-    //   var errorCode = error.code;
-    //   var errorMessage = error.message;
-    //   console.log(errorCode, errorMessage);
-    // });
   };
 
 }]);

@@ -51,8 +51,8 @@ app.controller("ResultsController", ["$http", "$scope", function($http, $scope) 
       searchTerms.uid = null;
     }
 
-    alert("all recipe request Submitted!")  // Todo: switch this out for an appropriate reset()
-    console.log(searchTerms, "Submitted")
+    alert("all recipe request Submitted!"); // Todo: switch this out for an appropriate reset()
+    console.log(searchTerms, "Submitted");
 
     $http({
       url: "/allRecipes",
