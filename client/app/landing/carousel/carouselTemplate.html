@@ -3,8 +3,8 @@
     <uib-slide ng-repeat="slide in slides track by slide.id" index="slide.id">
       <img ng-src="{{slide.image}}">
       <div class="carousel-caption">
-        <h1 class="main-title">Recipes Tonight!</h1>
-        <h3 class="subtitle">Browse recipes, store your own, and find them when you want to make something tonight!</h3>
+        <h1 class="title">{{slide.title}}</h1>
+        <h3 class="subtitle">{{slide.subtitle}}</h3>
       </div>
     </uib-slide>
   </uib-carousel>

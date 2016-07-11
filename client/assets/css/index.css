@@ -8,6 +8,10 @@
   margin-bottom:0;
 }
 
+.navbar {
+  margin-bottom: 0px;
+} 
+
 .results-container .searchForm-submit:focus{
    outline: none !important;
 }
