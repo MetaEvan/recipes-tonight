@@ -2,7 +2,7 @@ app.controller('CarouselController', function ($scope) {
 
   let mainImage = 2;
 
-  $scope.carouselInterval = 1000;
+  $scope.carouselInterval = 10000;
   $scope.active = mainImage;
   $scope.noWrap = false;
   let imageFiles = [

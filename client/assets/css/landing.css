@@ -36,3 +36,7 @@
 .navbar {
   margin-bottom: 0px;
 } 
+
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+    
+}
