@@ -1,10 +1,11 @@
-authApp.factory("Authentication", ["$rootScope", "$state", function($rootScope, $state) {
+authApp.factory("Authentication", ["$rootScope", "$state", "Auth", function($rootScope, $state, Auth) {
 
 
   let anonUser = {uid: null}
 
-  let findCurrentUser = function() {             // Todo: Make this a promise & use the async method
-    let user = firebase.auth().currentUser
+  // Todo: findCurrentUser might still in the middle of some $digest cycles?, so make this a promise & use the async method
+  let findCurrentUser = function() {             
+    let user = Auth.$getAuth()
     if (!user) {
       user = anonUser;
     }
@@ -12,14 +13,20 @@ authApp.factory("Authentication", ["$rootScope", "$state", function($rootScope, 
      return user;
   };
 
+  let signUp = function() {
+
+  }
+
   let login = function(email, pw) {
     firebase.auth().signInWithEmailAndPassword(email, pw).catch(function(error) {
       // Handle Errors here.
       var errorCode = error.code;
       var errorMessage = error.message;
       console.log(errorCode, errorMessage);
-
+    // }).then(function() {
+      console.log("fun testing!");
     });
+
     let authOff = firebase.auth().onAuthStateChanged(function(user) {
       $rootScope.currentUser = user;
       if (!user) {
@@ -32,8 +39,9 @@ authApp.factory("Authentication", ["$rootScope", "$state", function($rootScope, 
     });
   }
 
-  let logout = function() { firebase.auth().signOut().then(function() {
-    $rootScope.currentUser = anonUser;
+  let logout = function() { 
+    firebase.auth().signOut().then(function() {
+      $rootScope.currentUser = anonUser;
       console.log("Signed out");
       $state.go("main.home");
     }, function(error) {
@@ -44,9 +52,8 @@ authApp.factory("Authentication", ["$rootScope", "$state", function($rootScope, 
   return {
     findCurrentUser,
     login,
-    logout
+    logout,
+    signUp
   }
 }]);
 
-
-// TODO: fix the overapplication of onAuthStateChanged listeners.

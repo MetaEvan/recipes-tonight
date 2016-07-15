@@ -1,15 +1,19 @@
-app.controller("MainController", ["$scope", "$state", "Authentication", function($scope, $state, Authentication) {
+app.controller("MainController", ["$scope", "$state", "Auth", function($scope, $state, Auth) {
 
-  // Used for logged-in pages
 
-  var main = this;
+  let authChangeCounter = 0;  // For testing only!  Please delete before production. Todo: delete this!
 
-  $scope.logout = function() {
-    Authentication.logout();
-  }
+  let offAuth = Auth.$onAuthStateChanged(function(user) {
+    $scope.currentUser = user;
+    if (!user) {
+      $scope.currentUser = {uid: null, email: "Guest"}
+    }
+    $scope.$broadcast("userChange", $scope.currentUser);
 
-  // Initialization operations
-  main.initialize = function() {
-    console.log("MainCtrl initialized");
-  }
+    authChangeCounter++; // For testing only!  Please delete before production. Todo: delete this!
+    console.log(`Current User is ${$scope.currentUser.uid || "no one"} in NavbarController, ${authChangeCounter} times`);
+    
+    $scope.loggedIn = !!$scope.currentUser.uid;
+  })
+
 }]);

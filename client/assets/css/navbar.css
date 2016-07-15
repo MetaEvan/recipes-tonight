@@ -1,0 +1,25 @@
+/* NAVBAR
+-------------------------------------------------- */
+
+.navbar-template {
+  /*margin-bottom: 0px;*/
+  height: 40px;
+  overflow: hidden !important;
+} 
+
+/*Trying to deal with the scroll-bar on page-load issue:*/
+.navbar-collapse.in {
+     overflow-y: hidden; 
+}
+
+/*.navbar-collapse {
+  overflow: hidden !important; 
+}*/
+
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+    
+}
+
+.navbar-form .form-control {
+  height: 30px;
+}

@@ -1,25 +1,13 @@
-<div>
+<div ng-controller="LandingController as landing">
 
   <carousel></carousel>
 
   <div class="container">
-    <h1> Recipes Tonight! </h1>
-    <button ng-click="button()">Is there a user?</button>
-    <form name="loginForm" ng-submit="login()">
-      <label>
-        Email: <input type="text" name="user-email" ng-model="user.email" required>
-      </label>
-      <label>
-        Password: <input type="password" name="user-password" ng-model="user.password" required>
-      </label>
-      <button>Log In</button>
+    <!-- Perhaps a small expaination of how to use this site? -->
+    <form ng-submit="login()">
+      <input type="text" name="email" placeholder="email" ng-model="userInput.email">
+      <input type="password" name="password" placeholder="password" ng-model="userInput.password">
+      <button>Submit</button>
     </form>
-    <button>Make a new account!</button>
-    <p>
-      <br>
-      Browse Existing Recipes<br>
-      <br>
-      See random recipe
-    </p>
   </div>
 </div>

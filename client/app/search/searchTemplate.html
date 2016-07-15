@@ -1,4 +1,4 @@
-<div class="results-container" ng-controller="ResultsController as results">
+<div class="search-container container" ng-controller="SearchController as search">
 
   <h3>Find a recipe<span ng-hide="loggedIn"> from other users</span>:</h3>
   <div>
@@ -12,12 +12,12 @@
         <input type="radio" ng-model="find.onlyOwn" ng-value=false>
         <label>Everyone's recipes!</label><br/>
       </div>
-      <button>Submit!</button>
+      <button class="btn btn-default">Submit!</button>
     </form>
   </div>
     <div>
       <form>
-        <button ng-click="allRecipes()">Get all available recipes!</button>
+        <button class="btn btn-default" ng-click="allRecipes()">Get all available recipes!</button>
       </form>
     </div>
 

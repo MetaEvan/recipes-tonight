@@ -1,6 +1,6 @@
 app.controller('CarouselController', function ($scope) {
 
-  let mainImage = 2;
+  let mainImage = 3;
 
   $scope.carouselInterval = 10000;
   $scope.active = mainImage;

@@ -5,6 +5,7 @@ node_modules/
 client/assets/lib
 client/assets/images/fullSize
 npm-debug.log
+old/
 
 # Server Keys
 server/config/keys.js

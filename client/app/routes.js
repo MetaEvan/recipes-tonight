@@ -5,34 +5,30 @@ app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state('landing', {
       url: "/landing",
-      controller: 'LandingController',
-      controllerAs: 'landing',
+      // controller: 'LandingController',
+      // controllerAs: 'landing',
       views: {
         "": {
           templateUrl: "app/landing/landingTemplate.html"
         }
       }
-     })
+    })
     .state('main', {
-      url: "/main",
-      controller: 'MainController',
-      controllerAs: 'main',
+      url: "/main",  // Main Controller was assigned to the index.html body
       views: {
         "": {
           templateUrl: "app/main/mainTemplate.html"
         }
       }
-     })
+    })
     .state('main.home', {
       url: "^/home",
-      controller: 'MainController',
-      controllerAs: 'main',
       views: {
         "content": {
           templateUrl: "app/home/homeTemplate.html"
         }
       }
-     })
+    })
     .state('main.newRecipe', {
       url: "^/new-recipe",
       controller: 'NewRecipeController',
@@ -42,17 +38,17 @@ app.config(function($stateProvider, $urlRouterProvider) {
           templateUrl: "app/newRecipe/newRecipeTemplate.html"
         }
       },
-     })
-    .state('main.results', {
-      url: "^/results",
-      controller: 'ResultsController',
-      controllerAs: 'results',
+    })
+    .state('main.search', {
+      url: "^/search",
+      controller: 'SearchController',
+      controllerAs: 'search',
       views: {
         "content": {
-          templateUrl: "app/results/resultsTemplate.html"
+          templateUrl: "app/search/searchTemplate.html"
         }
       }
-     })
+    })
     .state('main.signup', {
       url: "^/signup",
       controller: 'SignupController',
@@ -65,13 +61,16 @@ app.config(function($stateProvider, $urlRouterProvider) {
      })
   });
 
-app.run(["$rootScope", "$state", "Authentication", function($rootScope, $state, Authentication) {
+app.run(["$rootScope", "$state", "Auth", function($rootScope, $state, Auth) {
   
 
   $rootScope.$on('$stateChangeStart',function(event, toState, toParams, fromState, fromParams) {
-    if ($rootScope.currentUser !== Authentication.findCurrentUser()) {
-      $rootScope.currentUser = Authentication.findCurrentUser();
-      // Todo: This has a possible async error.  Test for it later.
+    let currentUser = Auth.$getAuth()  // Todo: This has a possible async error.  Test for it later.
+    
+    if ($rootScope.currentUser !== currentUser) {
+      $rootScope.currentUser = currentUser;
+    } else {
+      // $state.go("anywhere");  // NEVER DO THIS
     }
   });
 }]);

@@ -14,21 +14,27 @@ var authApp = angular.module('authentication', [
   firebase.initializeApp(config);
 })
 
-.run(["$rootScope", "$state", function($rootScope, $state) {
-  // $rootScope.currentUser = firebase.auth().currentUser;
-
-  $rootScope.offAuth = firebase.auth().onAuthStateChanged(function(user) {
-    $rootScope.currentUser = user;
-    if (!user) {
-      $rootScope.currentUser = {uid: null}
-    }
-    console.log(`Current User is ${$rootScope.currentUser.uid || "no one"} on authentication initiation`);
-    $rootScope.offAuth();
-  })
-}])
 
 
 // Depricated
+
+// .run(["$rootScope", "$state", "Auth", function($rootScope, $state, Auth) {
+  // $rootScope.authChangeCounter = 0;  // For testing only!  Please delete before production. Todo: delete this!
+
+  // let offAuth = Auth.$onAuthStateChanged(function(user) {
+  //   $rootScope.currentUser = user;
+  //   if (!user) {
+  //     $rootScope.currentUser = {uid: null, email: "not@here.com"}
+  //   }
+
+  //   $rootScope.authChangeCounter++; // For testing only!  Please delete before production. Todo: delete this!
+  //   console.log(`Current User is ${$rootScope.currentUser.uid || "no one"} on authentication initiation, ${$rootScope.authChangeCounter} times`);
+    
+  //   offAuth();
+  // })
+// }])
+
+
   // if (!$rootScope.currentUser) {
   //   console.log(`redirected? ${$rootScope.currentUser}, yeah?`);
   //   $state.go('main.newRecipe');

@@ -3,9 +3,13 @@
   bottom: 0;
   height: auto;
   width: 100%;
-  padding: 10px 5px 5px;
   background-color: #f8f8f8;
   border-color: #e7e7e7;
   text-align: center;
   color: #274D6F;
+  z-index: 100;
+}
+
+.footer .icon-link {
+  font-size: 1.25em;
 }
