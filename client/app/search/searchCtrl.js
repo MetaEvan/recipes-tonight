@@ -3,14 +3,15 @@ app.controller("SearchController", ["$http", "$scope", "Search", "Auth", functio
 
   $scope.find = {};
   $scope.find.onlyOwn = false;
-  $scope.loggedIn = false;
+  $scope.loggedIn = !!$scope.currentUser;
 
   $scope.searchResults = [];
 
 
-  $scope.$on("userChanged", function(event, data) {
+  $scope.$on("userChange", function(event, data) {
     $scope.currentUser = data;
     $scope.loggedIn = !!$scope.currentUser;
+    console.log("SearchController data,", data, `loggedIn ${$scope.loggedIn}`)
   })
 
 
