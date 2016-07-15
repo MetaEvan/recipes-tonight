@@ -21,7 +21,7 @@
       </form>
     </div>
 
-  Here are your recipe results:
+  <p ng-show="searchResults.length">Here are your recipe results:</p>
   <table border="1">
     <tr ng-repeat="recipe in searchResults">
       <td>{{recipe.recipeText}}</td>

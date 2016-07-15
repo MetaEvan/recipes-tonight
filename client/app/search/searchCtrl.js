@@ -1,16 +1,19 @@
 app.controller("SearchController", ["$http", "$scope", "Search", "Auth", function($http, $scope, Search, Auth) {
   
+  let anonUser = {uid: null, email: "Guest"};
 
   $scope.find = {};
   $scope.find.onlyOwn = false;
-  $scope.loggedIn = !!$scope.currentUser;
-
+  
   $scope.searchResults = [];
+  
+  $scope.currentUser = $scope.currentUser || anonUser;
+  $scope.loggedIn = !!$scope.currentUser.uid;
 
 
   $scope.$on("userChange", function(event, data) {
     $scope.currentUser = data;
-    $scope.loggedIn = !!$scope.currentUser;
+    $scope.loggedIn = !!$scope.currentUser && !!$scope.currentUser.uid;
     console.log("SearchController data,", data, `loggedIn ${$scope.loggedIn}`)
   })
 

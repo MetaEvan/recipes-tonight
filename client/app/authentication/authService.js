@@ -1,7 +1,7 @@
 authApp.factory("Authentication", ["$rootScope", "$state", "Auth", function($rootScope, $state, Auth) {
 
 
-  let anonUser = {uid: null}
+  let anonUser = {uid: null, email: "Guest"}
 
   // Todo: findCurrentUser might still in the middle of some $digest cycles?, so make this a promise & use the async method
   let findCurrentUser = function() {             
@@ -9,9 +9,10 @@ authApp.factory("Authentication", ["$rootScope", "$state", "Auth", function($roo
     if (!user) {
       user = anonUser;
     }
-     $rootScope.currentUser = user;
      return user;
   };
+
+  let currentUser = findCurrentUser();
 
   let signUp = function() {
 
@@ -23,37 +24,46 @@ authApp.factory("Authentication", ["$rootScope", "$state", "Auth", function($roo
       var errorCode = error.code;
       var errorMessage = error.message;
       console.log(errorCode, errorMessage);
-    // }).then(function() {
-      console.log("fun testing!");
-    });
-
-    let authOff = firebase.auth().onAuthStateChanged(function(user) {
-      $rootScope.currentUser = user;
-      if (!user) {
-        console.log(`Logged out`);
-      } else {
-        console.log(`${user.uid} logged in`);
-      }
-      authOff();
-      $state.go('main.home')
-    });
+    }).then(function() {
+      let authOff = Auth.$onAuthStateChanged(function(user) {
+        if (!user) {
+          console.log(`Logged out`, user);
+        } else {
+          currentUser = user;
+          console.log(`${user.uid} logged in`);
+        }
+        authOff();
+        $state.go('main.home')
+      });
+    })
   }
 
   let logout = function() { 
-    firebase.auth().signOut().then(function() {
-      $rootScope.currentUser = anonUser;
+
+    // // There's a question in the AngularFire Dev as to whether the following should be a promise like firebase.auth.signout() is.  Probably not an issue?  Todo: [Low Priority] Check on this.
+    // Auth.$signOut();
+    // // After internal testing it is clear that it shouldn't be sync, as the following quick test shows a user still signed in.
+    //     // let quickUserTest = Auth.$getAuth();
+    //     // console.log("The user is still", quickUserTest);  // returns user before logout.
+
+
+    // using the base firebase (not AngularFire) version to prevent weird async stuff and getting no logs of it.
+    firebase.auth().signOut().then(function(){     
       console.log("Signed out");
-      $state.go("main.home");
-    }, function(error) {
-      console.log(`error in signing out: ${error}`)
-    });
+      currentUser = anonUser;
+      $state.go("main.home");  // maybe route elsewhere via the onAuthStateChange?
+    }).catch(function(error) {
+      console.log(error, " in signing out")
+    })
+
   };
 
   return {
     findCurrentUser,
     login,
     logout,
-    signUp
+    signUp,
+    currentUser,    // Should stay identical to result of Auth.$getAuth AND what is help in the main controller's $scope.currentUser.  Using this value for testing performance and security "later"  Todo: [Low Priority] Do this?
   }
 }]);
 
