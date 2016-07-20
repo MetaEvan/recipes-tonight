@@ -1,9 +1,9 @@
-authApp.factory("Authentication", ["$rootScope", "$state", "Auth", function($rootScope, $state, Auth) {
+utilityApp.factory("Authentication", ["$rootScope", "$state", "Auth", function($rootScope, $state, Auth) {
 
 
   let anonUser = {uid: null, email: "Guest"}
 
-  // Todo: findCurrentUser might still in the middle of some $digest cycles?, so make this a promise & use the async method
+  // Todo: findCurrentUser might still fail in the middle of some $digest cycles?, so make this a promise & use the async method
   let findCurrentUser = function() {             
     let user = Auth.$getAuth()
     if (!user) {
@@ -14,11 +14,20 @@ authApp.factory("Authentication", ["$rootScope", "$state", "Auth", function($roo
 
   let currentUser = findCurrentUser();
 
-  let signUp = function() {
-
+  let signUpEmail = function(email, pw) {
+    firebase.auth().createUserWithEmailAndPassword(email, pw).catch(function(error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      console.log(errorCode, errorMessage);
+    })
+    .then( function() {
+      loginEmail(email, pw);
+    });
   }
 
-  let login = function(email, pw) {
+  let loginEmail = function(email, pw) {
+    console.log(email, pw);
     firebase.auth().signInWithEmailAndPassword(email, pw).catch(function(error) {
       // Handle Errors here.
       var errorCode = error.code;
@@ -36,6 +45,15 @@ authApp.factory("Authentication", ["$rootScope", "$state", "Auth", function($roo
         $state.go('main.home')
       });
     })
+  }
+
+  let signupFacebook = function() {
+    let fbProvider = new firebase.auth.FacebookAuthProvider();
+    fbProvider.addScope('email');
+
+    if(false) {  //  Fix this, once you figure out what you get
+      alert("You already have an account with us.  Logging in now")
+    }
   }
 
   let logout = function() { 
@@ -60,9 +78,9 @@ authApp.factory("Authentication", ["$rootScope", "$state", "Auth", function($roo
 
   return {
     findCurrentUser,
-    login,
+    loginEmail,
     logout,
-    signUp,
+    signUpEmail,
     currentUser,    // Should stay identical to result of Auth.$getAuth AND what is help in the main controller's $scope.currentUser.  Using this value for testing performance and security "later"  Todo: [Low Priority] Do this?
   }
 }]);

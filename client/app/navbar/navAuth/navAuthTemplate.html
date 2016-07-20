@@ -1,0 +1,26 @@
+<div class="btn-group">
+  <button class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="true">{{authType.title}} <span class="caret"></span></button>
+  <ul class="dropdown-menu">
+    <li>{{authType.text}} with your email address:</li>
+    <li>
+      <form ng-submit="authType.emailAuth(userInput.email, userInput.password)">
+        <input type="text" name="email" placeholder="email" ng-model="userInput.email">
+        <input type="password" name="password" placeholder="password" ng-model="userInput.password">
+        <button class="btn btn-info">Submit</button>
+      </form>
+    </li>
+    <!-- Not yet fully implimented: -->
+    <!-- <li class="divider"></li>
+    <li>
+      {{authType.text}} via Facebook:</li>
+    <li>
+      <button class="btn btn-info btn-facebook" ng-click="signUpFB()">Facebook button!
+    </li>
+    <li class="divider"></li>
+    <li>
+      {{authType.text}} via Twitter:</li>
+    <li>
+      <button class="btn btn-info btn-twitter" ng-click="signUpTwitter()">Twitter button!
+    </li> -->
+  </ul>
+</div>

@@ -12,16 +12,16 @@
             <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/spacelab/bootstrap.min.css"> -->
 
         <!-- Superhero -->
-            <!-- <link rel="stylesheet" href="assets/lib/bootstrap/superhero/bootstrap.min.css"> -->
-            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/superhero/bootstrap.min.css">
+            <link rel="stylesheet" href="assets/lib/bootstrap/superhero/bootstrap.min.css">
+            <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.6/superhero/bootstrap.min.css"> -->
 
         <!-- Base Bootstrap -->
             <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous"> -->
 
 
     <!-- Foundation Icons -->
-        <!-- <link rel="stylesheet" href="assets/lib/foundation-icons/foundation-icons.css"> -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css">
+        <link rel="stylesheet" href="assets/lib/foundation-icons/foundation-icons.css">
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundicons/3.0.0/foundation-icons.css"> -->
 
 
     <link type="text/css" rel="stylesheet" href="https://www.gstatic.com/firebasejs/ui/0.4.0/firebase-ui-auth.css" />
@@ -43,14 +43,21 @@
 
     <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
 
-    <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase-app.js"></script>
+    <!-- <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script> -->
+    <script src="assets/lib/firebase/firebase-app.js"></script>
+    <script src="assets/lib/firebase/firebase-auth.js"></script>
+    <script src="assets/lib/firebase/firebase.js"></script>
+
     <script src="https://www.gstatic.com/firebasejs/ui/0.4.0/firebase-ui-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/live/3.0/firebase.js"></script>
+
+    <!-- <script src="..//firebase-ui-auth.js"></script> -->
+    
 
     
-    <!-- <script src="assets/lib/bootstrap/bootstrap.min.js"></script> -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="assets/lib/bootstrap/bootstrap.min.js"></script>
+    <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script> -->
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
@@ -66,6 +73,7 @@
     <script src="app/main/mainCtrl.js"></script>
     <script src="app/navbar/navbarCtrl.js"></script>
     <script src="app/navbar/navbarDirective.js"></script>
+    <script src="app/navbar/navAuth/navAuthDirective.js"></script>
     <script src="app/landing/landingCtrl.js"></script>
     <script src="app/landing/carousel/carouselCtrl.js"></script>
     <script src="app/landing/carousel/carouselDirective.js"></script>
@@ -74,9 +82,10 @@
     <script src="app/search/searchService.js"></script>
     <script src="app/signup/signupCtrl.js"></script>
     <script src="app/author/authorDirective.js"></script>
-    <script src="app/authentication/authentication.js"></script>
-    <script src="app/authentication/authService.js"></script>
-    <script src="app/authentication/firebaseAuthService.js"></script>
+    <script src="app/utilities/utilities.js"></script>
+    <script src="app/utilities/authentication/authService.js"></script>
+    <script src="app/utilities/authentication/firebaseAuthService.js"></script>
+    <script src="app/utilities/responsiveService.js"></script>
 
   </body>
 </html>

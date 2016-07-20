@@ -1,10 +1,10 @@
-var authApp = angular.module('authentication', [
+var utilityApp = angular.module('utilities', [
   'firebase',
 ])
 
 .config(function() {
 
-  // Initialize the Firebase SDK
+  // Connect to Firebase
   var config = {
     apiKey: "AIzaSyAHT16rmIHxzxH_Vf9oss2xM4jA2h7iMhI",
     authDomain: "recipes-tonight.firebaseapp.com",
@@ -13,7 +13,6 @@ var authApp = angular.module('authentication', [
   };
   firebase.initializeApp(config);
 })
-
 
 
 // Depricated

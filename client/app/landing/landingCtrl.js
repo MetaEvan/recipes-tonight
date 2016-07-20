@@ -5,7 +5,7 @@ app.controller("LandingController", ["$scope", "Authentication", function($scope
   console.log("Landing controller instantiated")
 
   $scope.login = function() {
-    Authentication.login($scope.userInput.email, $scope.userInput.password);
+    Authentication.loginEmail($scope.userInput.email, $scope.userInput.password);
   };
 
 }]);

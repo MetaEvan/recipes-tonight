@@ -5,23 +5,27 @@ app.controller("NewRecipeController", ["$scope", "$http", function($scope, $http
     recipeText: "",
     totalTime: 0,
     activeTime: 0,
+    public: true,
     source: "",
     uploadedBy: "",
     dateAdded: 0,
     locationAdded: "",
   };
-  console.log("NewRecipeController running.")
+  console.log("NewRecipeController running.");
 
   $scope.addRecipe = function(){
     $scope.newRecipe.dateAdded = Date.now();
     if ($scope.currentUser && $scope.currentUser.uid) {
       $scope.newRecipe.uploadedBy = $scope.currentUser.uid;
+    } else if (!$scope.newRecipe.public) {
+      alert("If you are not logged in, you cannot submit a private recipe!");  // Todo: switch this out for an appropriate reset()
+      break;
     } else {
-      $scope.newRecipe.uploadedBy = "Anon00000000000000000001"
+      $scope.newRecipe.uploadedBy = "Anon00000000000000000001";
     }
 
-    alert("Recipe Submitted!")   // Todo: switch this out for an appropriate reset()
-    consle.log(scope.newRecipe, `submitted`)
+    alert("Recipe Submitted!");  // Todo: switch this out for an appropriate reset()
+    consle.log(scope.newRecipe, `submitted`);
 
     $http({
       url: "/addRecipe",

@@ -1,7 +1,7 @@
 var app = angular.module('rtApp', [
+  'utilities',  // local
   'ui.router',
   'firebase',
-  'authentication',
   'ngAnimate',
   'ngTouch',
   'ui.bootstrap',

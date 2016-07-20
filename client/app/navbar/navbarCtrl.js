@@ -1,4 +1,4 @@
-app.controller('NavbarController', ['$scope', '$state', 'Search', "Authentication", function ($scope, $state, Search, Authentication) {
+app.controller('NavbarController', ['$scope', '$state', 'Search', 'Authentication', 'ResponsiveDetection', function ($scope, $state, Search, Authentication, ResponsiveDetection) {
 
   $scope.find = {};
   $scope.find.onlyOwn = false;
@@ -6,17 +6,42 @@ app.controller('NavbarController', ['$scope', '$state', 'Search', "Authenticatio
 
   $scope.searchResults = [];
 
-  $scope.signUp = function() {
-    // Go to pop-up modal
+
+  $scope.userInput = {
+  };
+
+  let signUpEmail = function(email, pw) {
+    Authentication.signUpEmail(email, pw);
+  }
+
+  let signUpFacebook = function() {
   }
  
-  $scope.login = function() {
-    // Go to pop-up modal
+  let loginEmail = function(email, pw) {
+    Authentication.loginEmail(email, pw);
+  }
+
+  let loginFacebook = function() {
   }
  
   $scope.logout = function() {
     Authentication.logout();
   }
+
+  $scope.signUpTemplate = {
+    title: "Sign Up",
+    text: "Sign up",
+    emailAuth: signUpEmail,
+    facebookAuth: signUpFacebook
+  }
+
+  $scope.loginTemplate = {
+    title: "Log In!",
+    text: "Log in",
+    emailAuth: loginEmail,
+    facebookAuth: loginFacebook
+  }
+
 
   $scope.$on("userChanged", function(event, data) {
     $scope.currentUser = data;
@@ -45,8 +70,7 @@ app.controller('NavbarController', ['$scope', '$state', 'Search', "Authenticatio
     alert("Search Request Submitted!")  // Todo: switch this out for an appropriate reset()
   }
 
-
-  // $scope.navCollapsed = true;
-  $scope.navCollapsed = false;  //This fixes an errant scrollbar issue, but makes the mobile version less optimal
+  // A bit of a hack to get around some loading twitchiness (i.e., errant scrollbars on the navbar)
+  $scope.navCollapsed = ResponsiveDetection.getBreakpoint() === 'xs';
 
 }]);

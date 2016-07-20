@@ -4,7 +4,7 @@
 
     <form name="add-recipe" ng-submit="addRecipe()">
       <label>
-        <textarea name="recipe-text" ng-model="newRecipe.recipeText" ng-required="string">
+        <textarea name="recipe-text" class="add-recipe-text" ng-model="newRecipe.recipeText" ng-required="string">
         </textarea>
       </label></br>
       <label>Let others view this recipe: <input type="checkbox" ng-model="newRecipe.public"></label></br>

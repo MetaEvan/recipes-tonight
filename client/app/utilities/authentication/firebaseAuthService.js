@@ -1,4 +1,4 @@
-authApp.factory("Auth", ["$firebaseAuth",
+utilityApp.factory("Auth", ["$firebaseAuth",
   function($firebaseAuth) {
     return $firebaseAuth();
   }
