@@ -1,0 +1,80 @@
+<div class="newRecipe-container container" ng-controller="NewRecipeController as newRecipe">
+  <div class="add-recipe-intro text-center">
+    <h3>How would you like to insert your recipe?</h3>
+    <h5>More information makes finding what you want to cook easier later</h5>
+  </div>
+
+  <div>
+    <form name="add-recipe" ng-submit="addRecipe()">
+      <uib-tabset active="recipeInputType" class="new-recipe-tabs">
+
+        <uib-tab index="0" heading="Annotated Text">
+          <div class="well">
+            <label>Title:</label><br>
+            <input type="text" name="title" class="new-recipe-title form-control" placeholder="{{placeholder.title}}"><br>
+
+            <label>Recipe Text:</label><br>
+            <textarea name="recipe-text" class="form-control add-recipe-text" ng-model="newRecipe.recipeText" ng-required="string" placeholder="{{placeholder.textblockRecipe}}">
+            </textarea><br>
+          </div>
+        </uib-tab>
+
+        <uib-tab index="1" heading="Picture(s) of Recipe">
+          <div class="well">
+            <label>Title:</label><br>
+            <input type="text" name="title" class="new-recipe-title form-control" placeholder="{{placeholder.title}}"><br>
+
+            <!-- from http://luxiyalu.com/angular-all-about-inputfile/ -->
+            <label class="import-picture">
+              <input type="file" multiple onchange="angular.element(this).scope().fileNameChanged(this)" class="hidden">
+                <div class="btn btn-primary">Add Picture...</div>
+            </label>
+            <div>
+              <ul  class="photos-to-import">
+                <li ng-repeat="file in photos">
+                  <span ng-hide="file.hiddenExample">
+                    {{file.name}} <a href="#">Remove</a>
+                  </span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </uib-tab>
+
+        <uib-tab index="2" heading="Website Reference">
+          <div class="well">
+            <label>Title:</label><br>
+            <input type="text" name="title" class="new-recipe-title form-control" placeholder="{{placeholder.title}}"><br>
+          </div>
+        </uib-tab>
+
+        <uib-tab index="3" heading="Plain Text">
+          <div class="well">
+            <label>Title:</label><br>
+            <input type="text" name="title" class="new-recipe-title form-control" placeholder="{{placeholder.title}}"><br>
+
+            <label>Recipe Text:</label><br>
+            <textarea name="recipe-text" class="form-control add-recipe-text" ng-model="newRecipe.recipeText" ng-required="string" placeholder="{{placeholder.textblockRecipe}}">
+            </textarea><br>
+          </div>
+        </uib-tab>
+
+      </uib-tabset>
+      
+      <div class="well">
+        <label>Source:</label><br>
+        <input type="text" name="source" class="new-recipe-source form-control" placeholder="{{placeholder.source}}"><br>
+        
+        <div ng-show="loggedIn">
+          <label>Let others view this recipe: </label>
+          <input type="checkbox" ng-model="newRecipe.public"><br>
+        </div>
+
+        <button class="btn btn-info" uib-tooltip="Submit completed recipe">Submit!</button>
+      </div>
+    </form>
+  </div>
+  
+  <div class="footer-buffer"></div>
+
+</div>

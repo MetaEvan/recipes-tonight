@@ -1,7 +1,7 @@
-<div class="search-container container" ng-controller="SearchController as search">
+<div class="results-container container" ng-controller="ResultsController as results">
 
   <h3>Find a recipe<span ng-hide="loggedIn"> from other users</span>:</h3>
-  <div class="well">
+  <div>
     <form name="find-recipes" ng-submit="findRecipes()">
       <label>Recipe Text: </label>
       <input type="text" name="recipe-search-text" ng-model="find.searchText" required>
@@ -12,19 +12,19 @@
         <input type="radio" ng-model="find.onlyOwn" ng-value=false>
         <label>Everyone's recipes!</label><br/>
       </div>
-      <button class="btn btn-default">Submit!</button>
+      <button>Submit!</button>
     </form>
+  </div>
     <div>
       <form>
-        <button class="btn btn-default" ng-click="allRecipes()">Get all available recipes!</button>
+        <button ng-click="allRecipes()">Get all available recipes!</button>
       </form>
     </div>
-  </div>
 
-  <p ng-show="searchResults.length">Here are your recipe results:</p>
+  Here are your recipe results:
   <table border="1">
     <tr ng-repeat="recipe in searchResults">
-      <td style="white-space:pre-wrap;">{{recipe.recipeText}}</td>
+      <td>{{recipe.recipeText}}</td>
       <td>{{recipe.uploadedBy}}</td>
       <td>{{recipe.dateAdded}}</td>
     </tr>

@@ -1,9 +1,27 @@
 .add-recipe-text {
-    width: 250px;
-    height: 300px;
-    padding: 12px 20px;
-    box-sizing: border-box;
-    border: 2px solid #ccc;
-    border-radius: 4px;
-    background-color: #f8f8f8;
+    height: 320px;
+    /*padding: 12px 20px;*/
+    /*box-sizing: border-box;*/
+    /*border: 2px solid #ccc;*/
+    /*border-radius: 4px;*/
+    /*background-color: #f8f8f8;*/
 }
+
+.photos-to-import {
+  text-align: left;
+}
+
+.thumb {
+  max-width: 50px;
+  min-width: 30px;
+  max-height: 70px;
+  min-height: 40px;
+}
+
+.move-btn {
+  display: block;
+}
+
+.vert-btn-group {
+  display: inline-block;
+} 

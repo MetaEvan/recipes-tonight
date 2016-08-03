@@ -5,8 +5,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
     .state('landing', {
       url: "/landing",
-      // controller: 'LandingController',
-      // controllerAs: 'landing',
       views: {
         "": {
           templateUrl: "app/landing/landingTemplate.html"
@@ -31,8 +29,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
     })
     .state('main.newRecipe', {
       url: "^/new-recipe",
-      controller: 'NewRecipeController',
-      controllerAs: 'newRecipe',
       views: {
         "content": {
           templateUrl: "app/newRecipe/newRecipeTemplate.html"
@@ -41,8 +37,6 @@ app.config(function($stateProvider, $urlRouterProvider) {
     })
     .state('main.search', {
       url: "^/search",
-      controller: 'SearchController',
-      controllerAs: 'search',
       views: {
         "content": {
           templateUrl: "app/search/searchTemplate.html"

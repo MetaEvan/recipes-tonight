@@ -12,6 +12,8 @@ Todo:
 
 4:  Add all the src="*.js" files to the minified/uglified gulp
 
+3:  Make sure controllers aren't being double-instantiated (in routes.js and the html)
+
 3:  Factor out the $rootScope usages (UID and Current Results)
 
 3:  Change many of the callbacks to promises

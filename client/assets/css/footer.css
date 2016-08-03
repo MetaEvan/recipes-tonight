@@ -13,3 +13,20 @@
 .footer .icon-link {
   font-size: 1.25em;
 }
+
+.footer-buffer {
+  margin-bottom: 60px;
+}
+
+.footer ul {
+  list-style-type: none;
+  text-align: center;
+}
+
+.footer li {
+  display: inline-block;
+}
+
+.footer p {
+  margin-bottom: 2px;
+}

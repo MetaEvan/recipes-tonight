@@ -1,21 +1,23 @@
 app.controller("SearchController", ["$http", "$scope", "Search", "Auth", function($http, $scope, Search, Auth) {
   
-  let anonUser = {uid: null, email: "Guest"};
-
+  // Sets up some bound default variables
   $scope.find = {};
   $scope.find.onlyOwn = false;
-  
   $scope.searchResults = [];
-  
+  //**********************************************************
+
+
+  // Controls logged-in status
+  let anonUser = {uid: null, email: "Guest"};
   $scope.currentUser = $scope.currentUser || anonUser;
   $scope.loggedIn = !!$scope.currentUser.uid;
-
 
   $scope.$on("userChange", function(event, data) {
     $scope.currentUser = data;
     $scope.loggedIn = !!$scope.currentUser && !!$scope.currentUser.uid;
-    console.log("SearchController data,", data, `loggedIn ${$scope.loggedIn}`)
+    console.log("SearchController data,", data.email, `loggedIn ${$scope.loggedIn}`)
   })
+  //**********************************************************
 
 
   $scope.findRecipes = function(){

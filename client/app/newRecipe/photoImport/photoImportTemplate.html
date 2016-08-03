@@ -1,0 +1,20 @@
+<div>
+    <label class="import-picture">Add picture(s) of the text of the recipe:
+      <input type="file" onchange="angular.element(this).scope().imageUpload(this)" class="hidden">
+        <div class="btn btn-primary">Choose</div>
+    </label><br>
+
+    <ul class="photos-to-import">
+      <li ng-repeat="file in photos[subject]">
+        <div class="vert-btn-group">
+          <div class="glyphicon glyphicon-triangle-top move-btn" ng-click="movePhoto($index, -1, subject)"></div>
+          <div class="glyphicon glyphicon-triangle-bottom move-btn" ng-click="movePhoto($index, 1, subject)"></div>
+        </div>
+        <img ng-src="{{file.imgData}}" class="thumb"><span>
+          {{file.name}} &ensp;
+          <a ng-click="photos[subject].splice($index,1)" class="small text-danger">Remove</a>
+          <!-- <a ng-click="newRecipe.textPhotos.splice($index,1)" class="btn btn-danger ">x</a> -->
+        </span>
+      </li>
+    </ul>
+</div>

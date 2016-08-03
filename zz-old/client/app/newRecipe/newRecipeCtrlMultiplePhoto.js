@@ -1,4 +1,4 @@
-app.controller("NewRecipeController", ["$scope", "$http", "ImageStorage", "NewRecipe", function($scope, $http, ImageStorage, NewRecipe) {
+app.controller("NewRecipeController", ["$scope", "$http", "ImageStorage", function($scope, $http, ImageStorage) {
 
   // Sets up some bound default variables
   $scope.placeholder = {
@@ -25,8 +25,6 @@ app.controller("NewRecipeController", ["$scope", "$http", "ImageStorage", "NewRe
     totalTime: 0,
     activeTime: 0,
     public: true,
-    photos: {},
-    numPhotos: {},
     source: "",
     sourceDomain: "",
     uploadedBy: "",
@@ -36,6 +34,8 @@ app.controller("NewRecipeController", ["$scope", "$http", "ImageStorage", "NewRe
     notes: "",
   };
 
+  $scope.photos = [];
+  $scope.photoNames = "";
   //**********************************************************
 
 
@@ -51,26 +51,100 @@ app.controller("NewRecipeController", ["$scope", "$http", "ImageStorage", "NewRe
   })
   //**********************************************************
 
-  let displaySuccess = function(urls) {
-    alert("Everything Successfully uploaded");
-    console.log("sucess urls", urls);
+  $scope.titleForm = ""
+
+
+
+
+
+  console.log("NewRecipeController running.");
+
+
+  // let checkInputType = function() {
+  //   switch ($scope.recipeInputType) {
+  //     case 0:
+  //       $scope.newRecipe.inputType = "annotated";
+  //       break;
+  //     case 1:
+  //       $scope.newRecipe.inputType = "pictures"
+  //       break;
+  //     case 2:
+  //       $scope.newRecipe.inputType = "website"
+  //       break;
+  //     case 3:
+  //       $scope.newRecipe.inputType = "textblock"
+  //       break;
+  //     default:
+  //       console.log ("Input type tab error");
+  //   }
+  // }
+
+
+  // Based on http://luxiyalu.com/angular-all-about-inputfile/
+  $scope.imageUpload = function(el, isRecipeText) {
+    let photos = $scope.photos;
+    let dupeFlag = false;
+    let maxPhotos = 6;
+    let numPhotos = el.files.length + photos.length;
+
+    if (numPhotos > maxPhotos) {
+      alert (`You can use ${maxPhotos} photos maximum`);  // Todo: add a user-friendly alert
+      return;
+    }
+
+
+    for (let i = 0; i < el.files.length; i++) {
+
+      ImageStorage.getFileType(el.files[i].name); // Todo: turn this into a image type check
+
+      // Disallow duplicates
+      for (let j = 0; j < photos.length; j++) {
+        if (el.files[i] === photos[j]) {
+          dupeFlag = true;
+          numPhotos--;
+        }
+      }
+      if (dupeFlag) {
+        dupeFlag = false;
+        continue;
+      }
+
+      let reader = new FileReader();
+      reader.onload = function(event){
+        $scope.$apply(function() {
+          photos.push(event.target.result);
+          console.log(photos)
+          if (photos.length === numPhotos) {
+            $scope.photos = photos;
+          }
+        });
+      }; 
+      reader.readAsDataURL(el.files[i]);
+
+    }
+  }
+
+  let sortPhotos = function(arr) {
+    arr.sort(function(a,b){
+      return a.name.localeCompare(b.name);
+    })
+  }
+
+
+  let uploadPhotos = function(index) {
+    ImageStorage.uploadPhotos($scope.photos);
   }
 
   $scope.addRecipe = function() {
-    let isPublic = $scope.newRecipe.public;  // Saving value to use after http req
 
-    let photoFiles = NewRecipe.getBucket();
-    $scope.newRecipe.numPhotos = {
-      text: photoFiles.textPhotos.length,
-      food: photoFiles.foodPhotos.length,
-    };
+    // checkInputType();
 
     $scope.newRecipe.dateAdded = Date.now();
 
     if ($scope.currentUser && $scope.currentUser.uid) {
       $scope.newRecipe.uploadedBy = $scope.currentUser.uid;
     } else {
-      $scope.newRecipe.uploadedBy = "Guest";
+      $scope.newRecipe.uploadedBy = "Anon00000000000000000001";
     }
 
     alert("Recipe Submitted!");  // Todo: switch this out for an appropriate reset()
@@ -82,9 +156,6 @@ app.controller("NewRecipeController", ["$scope", "$http", "ImageStorage", "NewRe
       data: $scope.newRecipe
     }).then(function successCallback(res) {
       console.log(`addRecipe response added recipe with docId: ${res.data}`);
-      return ImageStorage.storePhotos(photoFiles, res.data, isPublic).then(function() {
-        displaySuccess(urls);
-      })
     }, function errorCallback(err) {
       console.log(`Error adding recipe: ${err.data}`)
     })

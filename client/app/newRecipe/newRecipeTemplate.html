@@ -1,17 +1,62 @@
 <div class="newRecipe-container container" ng-controller="NewRecipeController as newRecipe">
-  <div>
-    Insert a new recipe here:
+  <div class="add-recipe-intro text-center">
+    <h3>Insert your recipe here</h3>
+    <h5>Add the recipe text by typing or copying it in, uploading pictures of the text, or just linking to the website.  More information added here will make it easier to find the right recipe later.</h5>
+  </div>
 
-    <form name="add-recipe" ng-submit="addRecipe()">
-      <label>
-        <textarea name="recipe-text" class="add-recipe-text" ng-model="newRecipe.recipeText" ng-required="string">
-        </textarea>
-      </label></br>
-      <label>Let others view this recipe: <input type="checkbox" ng-model="newRecipe.public"></label></br>
-      <button class="btn btn-default">Submit!</button>
+  <div>
+    <form name="add-recipe" ng-submit="addRecipe()">          
+      <div class="well">
+        <label>Title:</label><br>
+        <input type="text" name="title" class="new-recipe-title form-control" placeholder="{{placeholder.title}}"><br>
+
+        <label>Recipe Text:</label><br>
+        <textarea name="recipe-text" class="form-control add-recipe-text" ng-model="newRecipe.recipeText" ng-required="string" placeholder="{{placeholder.textblockRecipe}}" rows="10">
+        </textarea><br>
+
+        <div photoimport subject="textPhotos"></div>
+
+        <label>Source:</label><br>
+        <input type="text" name="source" class="new-recipe-source form-control" placeholder="{{placeholder.source}}"><br>
+
+        <div class="row form-inline">
+          <div class="col-md-6">
+            <label>Active Time:</label>
+            <div class="input-group form-group">
+              <input type="text" placeholder="20">
+              <select class="input-group-addon">
+                <option value="activeMinutes">Minutes</option>
+                <option value="activeHours">Hours</option>
+              </select> 
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <label>Total Time:</label>
+            <div class="input-group form-group">
+              <input type="text" placeholder="20">
+              <select class="input-group-addon">
+                <option value="activeMinutes">Minutes</option>
+                <option value="activeHours">Hours</option>
+              </select> 
+            </div>
+        </div>
+
+        <br>
+        <br>
+        <div photoimport subject="foodPhotos"></div>
+
+        <div ng-show="loggedIn">
+          <label>Let others view this recipe: </label>
+          <input type="checkbox" ng-model="newRecipe.public"><br>
+        </div>
+
+
+        <button class="btn btn-info" uib-tooltip="Submit completed recipe">Submit!</button>
+      </div>
     </form>
   </div>
-  <div>
-  </div>
-</div>
+  
+  <div class="footer-buffer"></div>
 
+</div>

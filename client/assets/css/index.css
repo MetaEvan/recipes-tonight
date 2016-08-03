@@ -24,20 +24,11 @@
 body {
   /*background-color: #d3d3d3;*/
   overflow-x: hidden;
-  font-family: AvenirNextPro, cursive;  /* change this -E */
+  font-family: AvenirNextPro, cursive;  /* Todo: change this  */
 }
 
  ul {
   list-style-type: none;
-  text-align: center;
-}
-
-li {
-  display: inline-block;
-}
-
-p {
-  margin-bottom: 2px;
 }
 
 a, a:hover, a:focus {
