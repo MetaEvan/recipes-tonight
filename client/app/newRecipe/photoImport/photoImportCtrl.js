@@ -1,4 +1,4 @@
-app.controller("PhotoImportController", ["$scope", "ImageStorage", "NewRecipe", function($scope, ImageStorage, NewRecipe) {
+app.controller("PhotoImportController", ["$scope", "Utility", "NewRecipe", function($scope, Utility, NewRecipe) {
 
 
   console.log($scope.newRecipe, "$scope.newRecipe");
@@ -7,7 +7,7 @@ app.controller("PhotoImportController", ["$scope", "ImageStorage", "NewRecipe", 
     foodPhotos: [],
   };
 
-  $scope.imageUpload = function(el) {
+  $scope.imageUpload = function(el) {     // Todo: make work for mobile devices.
     const photoSubject = $scope.subject;
     let photoFiles = $scope.photos[photoSubject]
     console.log(photoFiles, "photoFiles", photoSubject, "photoSubject");
@@ -25,14 +25,14 @@ app.controller("PhotoImportController", ["$scope", "ImageStorage", "NewRecipe", 
     // If user cancels photo selection:
     if (!file) return;
 
-    // check for maximum allowable photos for this type
+    // check for maximum allowable photos for this type    // Todo: change to single input code or modify other code to allow mulitple input
     let maxPhotos = maxType[photoSubject + 'Max'];
     if (photoFiles.length >= maxPhotos) {
       alert (`You can use ${maxPhotos} photos maximum`);  // Todo: add a user-friendly alert
       return;
     }
 
-    let fileType = ImageStorage.getFileType(file.name); //  Possibly overqualified
+    let fileType = Utility.getFileType(file.name); //  Possibly overqualified
     if (!fileType.match(/(jpg|jpeg|png|gif)$/)) {
       alert('This file is not an image');                  // Todo: add a user-friendly alert
       return;

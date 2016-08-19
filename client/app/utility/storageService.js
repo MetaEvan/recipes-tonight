@@ -1,19 +1,10 @@
-utilityApp.factory('ImageStorage', ['$window', 'Auth', function ($window, Auth) {
+utilityApp.factory('ImageStorage', ['$window', 'Auth', 'Utility', function ($window, Auth, Utility) {
 
   // Get a reference to the storage service, which is used to create references in your storage bucket
   let storage = firebase.storage();
 
   // Create a storage reference from our storage service
   let storageRef = storage.ref();
-
-
-  let getFileType = function(fileName) {
-    // From http://stackoverflow.com/questions/190852/how-can-i-get-file-extensions-with-javascript
-    // it could be
-    // return filename.split('.').pop();
-    // but for Kamron's sake, I'm going with the more efficient bitwise:
-    return fileName.substr((~-fileName.lastIndexOf(".") >>> 0) + 2);
-  }
 
 
   let addPhotoMetadata = function (photo, isPublic, isThumb, index, photoSubject, recipeId) {
@@ -24,7 +15,7 @@ utilityApp.factory('ImageStorage', ['$window', 'Auth', function ($window, Auth) 
     photo.metadata.restriction = isPublic ? "public" : "private";
     photo.metadata.photoSubject = photoSubject;
     photo.metadata.size = isThumb ? "thumb" : "full";
-    photo.metadata.name = photoSubject + index + "." + getFileType(photo.name);  // Seems dangerous for collisions on updates.  Todo: fix this.  Add date.now?
+    photo.metadata.name = photoSubject + index + "." + Utility.getFileType(photo.name);  // Seems dangerous for collisions on updates.  Todo: fix this.  Add date.now?
     return photo;
   }
 
@@ -107,7 +98,6 @@ utilityApp.factory('ImageStorage', ['$window', 'Auth', function ($window, Auth) 
 
   return {
     addPhotoMetadata,
-    getFileType,
     storePhotos,
   }
 }]);

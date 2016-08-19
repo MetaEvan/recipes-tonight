@@ -22,8 +22,14 @@ app.controller("NewRecipeController", ["$scope", "$http", "ImageStorage", "NewRe
     title: "",
     ingredients: [],
     recipeText: "",
-    totalTime: 0,
-    activeTime: 0,
+    totalTime: {
+      value: "",
+      unit: "min"
+    },
+    activeTime:  {
+      value: "",
+      unit: "min"
+    },
     public: true,
     photos: {},
     numPhotos: {},
@@ -58,6 +64,7 @@ app.controller("NewRecipeController", ["$scope", "$http", "ImageStorage", "NewRe
 
   $scope.addRecipe = function() {
     let isPublic = $scope.newRecipe.public;  // Saving value to use after http req
+    
 
     let photoFiles = NewRecipe.getBucket();
     $scope.newRecipe.numPhotos = {
@@ -82,9 +89,13 @@ app.controller("NewRecipeController", ["$scope", "$http", "ImageStorage", "NewRe
       data: $scope.newRecipe
     }).then(function successCallback(res) {
       console.log(`addRecipe response added recipe with docId: ${res.data}`);
-      return ImageStorage.storePhotos(photoFiles, res.data, isPublic).then(function() {
-        displaySuccess(urls);
-      })
+      if ($scope.newRecipe.numPhotos.text || $scope.newRecipe.numPhotos.text) {
+        return ImageStorage.storePhotos(photoFiles, res.data, isPublic).then(function() {
+          displaySuccess(urls);
+        })
+      } else {
+        return displaySuccess("no photos");
+      }
     }, function errorCallback(err) {
       console.log(`Error adding recipe: ${err.data}`)
     })

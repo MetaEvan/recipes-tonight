@@ -8,7 +8,7 @@
     <form name="add-recipe" ng-submit="addRecipe()">          
       <div class="well">
         <label>Title:</label><br>
-        <input type="text" name="title" class="new-recipe-title form-control" placeholder="{{placeholder.title}}"><br>
+        <input type="text" name="title" class="new-recipe-title form-control" ng-model="newRecipe.title" placeholder="{{placeholder.title}}"><br>
 
         <label>Recipe Text:</label><br>
         <textarea name="recipe-text" class="form-control add-recipe-text" ng-model="newRecipe.recipeText" ng-required="string" placeholder="{{placeholder.textblockRecipe}}" rows="10">
@@ -17,16 +17,16 @@
         <div photoimport subject="textPhotos"></div>
 
         <label>Source:</label><br>
-        <input type="text" name="source" class="new-recipe-source form-control" placeholder="{{placeholder.source}}"><br>
+        <input type="text" name="source" class="new-recipe-source form-control" placeholder="{{placeholder.source}}" ng-model="newRecipe.source"><br>
 
         <div class="row form-inline">
           <div class="col-md-6">
             <label>Active Time:</label>
             <div class="input-group form-group">
-              <input type="text" placeholder="20">
-              <select class="input-group-addon">
-                <option value="activeMinutes">Minutes</option>
-                <option value="activeHours">Hours</option>
+              <input type="text" placeholder="15" ng-model="newRecipe.activeTime.value">
+              <select class="input-group-addon" ng-model="newRecipe.activeTime.unit">
+                <option value="minutes">Minutes</option>
+                <option value="hours">Hours</option>
               </select> 
             </div>
           </div>
@@ -34,10 +34,11 @@
           <div class="col-md-6">
             <label>Total Time:</label>
             <div class="input-group form-group">
-              <input type="text" placeholder="20">
-              <select class="input-group-addon">
-                <option value="activeMinutes">Minutes</option>
-                <option value="activeHours">Hours</option>
+              <input type="text" placeholder="25" ng-model="newRecipe.totalTime.value">
+              <select class="input-group-addon"  ng-model="newRecipe.totalTime.unit">
+                <option value="minutes">Minutes</option>
+                <option value="hours">Hours</option>
+                <option value="days">Days</option>
               </select> 
             </div>
         </div>

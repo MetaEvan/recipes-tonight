@@ -22,11 +22,11 @@
   </div>
 
   <p ng-show="searchResults.length">Here are your recipe results:</p>
-  <table border="1">
-    <tr ng-repeat="recipe in searchResults">
-      <td style="white-space:pre-wrap;">{{recipe.recipeText}}</td>
-      <td>{{recipe.uploadedBy}}</td>
-      <td>{{recipe.dateAdded}}</td>
-    </tr>
-  </table>
+  <ul class="row">
+    <li ng-repeat="recipe in searchResults">   <!-- "| orderBy:main.filterType" format for ordering-->
+      <div ng-click="openRecipe(this)" class="col-md-6 col-lg-4">
+        <div resultCard recipe="recipe" currentUser="currentUser"></div>
+      </div>
+    </li>
+  </ul>
 </div>

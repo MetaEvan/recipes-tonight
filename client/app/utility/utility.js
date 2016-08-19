@@ -1,4 +1,4 @@
-var utilityApp = angular.module('utilities', [
+var utilityApp = angular.module('utility', [
   'firebase',
 ])
 

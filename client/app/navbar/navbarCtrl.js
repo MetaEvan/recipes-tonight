@@ -1,4 +1,4 @@
-app.controller('NavbarController', ['$scope', '$state', 'Search', 'Authentication', 'ResponsiveDetection', function ($scope, $state, Search, Authentication, ResponsiveDetection) {
+app.controller('NavbarController', ['$scope', '$state', 'Search', 'Authentication', 'Utility', function ($scope, $state, Search, Authentication, Utility) {
 
   $scope.find = {};
   $scope.find.onlyOwn = false;
@@ -71,6 +71,6 @@ app.controller('NavbarController', ['$scope', '$state', 'Search', 'Authenticatio
   }
 
   // A bit of a hack to get around some loading twitchiness (i.e., errant scrollbars on the navbar)
-  $scope.navCollapsed = ResponsiveDetection.getBreakpoint() === 'xs';
+  $scope.navCollapsed = Utility.getBreakpoint() === 'xs';
 
 }]);

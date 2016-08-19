@@ -3,7 +3,7 @@ app.directive('navauth', [function() {
     restrict: 'A',
     replace: true,
     scope: {
-      authType: "=authType"
+      authType: "="
     },
     templateUrl: 'app/navbar/navAuth/navAuthTemplate.html',
   };
