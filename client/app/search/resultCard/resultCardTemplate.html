@@ -6,13 +6,6 @@
     <div class="col-md-6">Active Time: {{recipe.activeTime.value + " " + recipe.activeTime.units}}</div>
     <div class="col-md-6">Total Time: {{recipe.totalTime.value + " " + recipe.totalTime.units}}</div>
   <div>Source:</div>
-  <div>First Uploaded {{(new Date(recipe.dateAdded)).toLocaleDateString()}}</div>
+  <!-- <div>First Uploaded {{(new Date(recipe.dateAdded)).toLocaleDateString()}}</div> -->
 
 </div>
-<table border="1">
-    <tr ng-repeat="recipe in searchResults">
-      <td style="white-space:pre-wrap;">{{recipe.recipeText}}</td>
-      <td>{{recipe.uploadedBy}}</td>
-      <td>{{(new Date(recipe.dateAdded)).toLocaleDateString()}}</td>
-    </tr>
-  </table>

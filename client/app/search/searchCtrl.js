@@ -19,6 +19,10 @@ app.controller("SearchController", ["$http", "$scope", "Search", "Auth", functio
   })
   //**********************************************************
 
+  $scope.openRecipe = function(recipe) {
+    alert("You're awesome!")
+  }
+
 
   $scope.findRecipes = function(){
     let searchTerms = {
