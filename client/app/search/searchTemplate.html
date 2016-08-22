@@ -24,7 +24,7 @@
   <p ng-show="searchResults.length">Here are your recipe results:</p>
   <ul class="row">
     <li ng-repeat="recipe in searchResults">   <!-- "| orderBy:main.filterType" format for ordering-->
-      <div ng-click="openRecipe(this)" class="col-md-12">
+      <div ng-click="openRecipe(this)" class="col-md-6 container">
         <div resultCard recipe="recipe" currentUser="currentUser"></div>
       </div>
     </li>

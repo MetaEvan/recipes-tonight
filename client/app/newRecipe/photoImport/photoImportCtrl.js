@@ -7,6 +7,13 @@ app.controller("PhotoImportController", ["$scope", "Utility", "NewRecipe", funct
     foodPhotos: [],
   };
 
+  $scope.insertDialog = "Insert pictures of the text of the recipe:";
+
+  if ($scope.subject === "foodPhotos") {
+    $scope.insertDialog = "Insert pictures of the completed food:";
+  }
+
+
   $scope.imageUpload = function(el) {     // Todo: make work for mobile devices.
     const photoSubject = $scope.subject;
     let photoFiles = $scope.photos[photoSubject]

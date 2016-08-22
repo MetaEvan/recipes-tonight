@@ -1,4 +1,4 @@
-app.controller("NewRecipeController", ["$scope", "$http", "ImageStorage", "NewRecipe", function($scope, $http, ImageStorage, NewRecipe) {
+app.controller("NewRecipeController", ["$scope", "$http", "ImageStorage", "NewRecipe", "$uibModal", "$timeout", function($scope, $http, ImageStorage, NewRecipe, $uibModal, $timeout) {
 
   // Sets up some bound default variables
   $scope.placeholder = {
@@ -18,17 +18,17 @@ app.controller("NewRecipeController", ["$scope", "$http", "ImageStorage", "NewRe
     source: "Grandma, http://bembu.com/healthy-peanut-butter-cookie-recipe, myself, etc."
   }
 
-  $scope.newRecipe = {
+  let initialNewRecipe = {
     title: "",
     ingredients: [],
     recipeText: "",
     totalTime: {
-      value: "",
-      unit: "min"
+      value: 1,
+      unit: "minutes"
     },
     activeTime:  {
-      value: "",
-      unit: "min"
+      value: 1,
+      unit: "minutes"
     },
     public: true,
     photos: {},
@@ -41,6 +41,47 @@ app.controller("NewRecipeController", ["$scope", "$http", "ImageStorage", "NewRe
     inputType: "",
     notes: "",
   };
+
+
+
+  $scope.newRecipe = initialNewRecipe;
+
+
+  //**********************************************************
+  // Modals
+
+  let submittingModal = function() {
+    let modalInstance = $uibModal.open({
+      // templateUrl: 'myModalContent.html',
+      template: "<h2 class='well'>Recipe Submitted!</h2>",
+      resolve: {
+        fullRecipe: function () {
+          return $scope.newRecipe;
+        }
+      },
+      backdrop:"static"
+    });
+
+    modalInstance.result.then(function (result) {
+      console.log('Modal dismissed at: ' + new Date(), result);
+    });
+
+    return modalInstance;
+  }
+
+  let successModal = function() {
+    let modalInstance = $uibModal.open({
+      // templateUrl: 'myModalContent.html',
+      template: "<h2 class='well'>Recipe Stored Successfully!</h2>",
+    });
+
+    $timeout(function() {
+      modalInstance.close();
+    }, 800)
+
+    return modalInstance;
+  }
+
 
   //**********************************************************
 
@@ -57,8 +98,10 @@ app.controller("NewRecipeController", ["$scope", "$http", "ImageStorage", "NewRe
   })
   //**********************************************************
 
-  let displaySuccess = function(urls) {
-    alert("Everything Successfully uploaded");
+  let displaySuccess = function(urls, submitModalInstance) {
+    $scope.newRecipe = initialNewRecipe;
+    submitModalInstance.close("displaySuccess success");
+    successModal();
     console.log("sucess urls", urls);
   }
 
@@ -80,7 +123,8 @@ app.controller("NewRecipeController", ["$scope", "$http", "ImageStorage", "NewRe
       $scope.newRecipe.uploadedBy = "Guest";
     }
 
-    alert("Recipe Submitted!");  // Todo: switch this out for an appropriate reset()
+    let submitModalInstance = submittingModal();
+
     console.log($scope.newRecipe, `submitted`);
 
     $http({
@@ -91,10 +135,10 @@ app.controller("NewRecipeController", ["$scope", "$http", "ImageStorage", "NewRe
       console.log(`addRecipe response added recipe with docId: ${res.data}`);
       if ($scope.newRecipe.numPhotos.text || $scope.newRecipe.numPhotos.text) {
         return ImageStorage.storePhotos(photoFiles, res.data, isPublic).then(function() {
-          displaySuccess(urls);
+          displaySuccess(urls, submitModalInstance);
         })
       } else {
-        return displaySuccess("no photos");
+        return displaySuccess("no photos", submitModalInstance);
       }
     }, function errorCallback(err) {
       console.log(`Error adding recipe: ${err.data}`)

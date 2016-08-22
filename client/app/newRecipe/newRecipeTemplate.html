@@ -5,10 +5,10 @@
   </div>
 
   <div>
-    <form name="add-recipe" ng-submit="addRecipe()">          
+    <form name="add-recipe">          
       <div class="well">
         <label>Title:</label><br>
-        <input type="text" name="title" class="new-recipe-title form-control" ng-model="newRecipe.title" placeholder="{{placeholder.title}}"><br>
+        <input type="text" name="title" class="new-recipe-title form-control" ng-model="newRecipe.title" placeholder="{{placeholder.title}}" required><br>
 
         <label>Recipe Text:</label><br>
         <textarea name="recipe-text" class="form-control add-recipe-text" ng-model="newRecipe.recipeText" ng-required="string" placeholder="{{placeholder.textblockRecipe}}" rows="10">
@@ -53,7 +53,7 @@
         </div>
 
 
-        <button class="btn btn-info" uib-tooltip="Submit completed recipe">Submit!</button>
+        <a class="btn btn-info" uib-tooltip="Submit completed recipe" ng-click="addRecipe()">Submit!</a>
       </div>
     </form>
   </div>

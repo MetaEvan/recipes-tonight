@@ -1,9 +1,10 @@
-app.controller("SearchController", ["$http", "$scope", "Search", "Auth", function($http, $scope, Search, Auth) {
+app.controller("SearchController", ["$http", "$scope", "Search", "Auth", "$uibModal", "$timeout", function($http, $scope, Search, Auth, $uibModal, $timeout) {
   
   // Sets up some bound default variables
   $scope.find = {};
   $scope.find.onlyOwn = false;
   $scope.searchResults = [];
+  $scope.searchingModalInstance = {};
   //**********************************************************
 
 
@@ -17,6 +18,28 @@ app.controller("SearchController", ["$http", "$scope", "Search", "Auth", functio
     $scope.loggedIn = !!$scope.currentUser && !!$scope.currentUser.uid;
     console.log("SearchController data,", data.email, `loggedIn ${$scope.loggedIn}`)
   })
+  //**********************************************************
+  // Modals
+
+  let searchingModal = function() {
+    let modalInstance = $uibModal.open({
+      // templateUrl: 'myModalContent.html',
+      template: "<h2 class='well'>Searching for recipes...</h2>",
+      resolve: {
+        fullRecipe: function () {
+          return $scope.newRecipe;
+        }
+      },
+      backdrop:"static"
+    });
+
+    modalInstance.result.then(function (result) {
+      console.log('Modal dismissed at: ' + new Date(), result);
+    });
+
+    return modalInstance;
+  }
+
   //**********************************************************
 
   $scope.openRecipe = function(recipe) {
@@ -37,7 +60,7 @@ app.controller("SearchController", ["$http", "$scope", "Search", "Auth", functio
 
     Search.getRecipes(searchTerms, "/findRecipes", displayRecipes);
 
-    alert("Search Request Submitted!")  // Todo: switch this out for an appropriate reset()
+    $scope.searchingModalInstance = searchingModal();
   }
 
   $scope.allRecipes = function(){
@@ -53,11 +76,12 @@ app.controller("SearchController", ["$http", "$scope", "Search", "Auth", functio
 
     Search.getRecipes(searchTerms, "/allRecipes", displayRecipes);
 
-    alert("all recipe request Submitted!"); // Todo: switch this out for an appropriate reset()
+    $scope.searchingModalInstance = searchingModal();
   }
 
-   let displayRecipes = function(searchResults) {
+  let displayRecipes = function(searchResults) {
     $scope.searchResults = searchResults;
+    $scope.searchingModalInstance.close();
   }
 
 }]);

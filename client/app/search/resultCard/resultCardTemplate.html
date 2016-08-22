@@ -1,10 +1,10 @@
-<div class="result-card container">
+<div class="result-card well">
   <h3>{{recipe.title}}</h3>
   <span ng-show="recipe.uploadedBy === currentUser.uid">Your Recipe!</span>
   <div style="white-space:pre-wrap;">{{recipe.recipeText}}</div>
   <div class="time-display row">
-    <div class="col-md-6">Active Time: {{recipe.activeTime.value + " " + recipe.activeTime.units}}</div>
-    <div class="col-md-6">Total Time: {{recipe.totalTime.value + " " + recipe.totalTime.units}}</div>
+    <div class="col-md-6">Active Time: {{recipe.activeTime.value + " " + recipe.activeTime.unit}}</div>
+    <div class="col-md-6">Total Time: {{recipe.totalTime.value + " " + recipe.totalTime.unit}}</div>
   <div>Source:</div>
   <!-- <div>First Uploaded {{(new Date(recipe.dateAdded)).toLocaleDateString()}}</div> -->
 
