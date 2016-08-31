@@ -2,7 +2,9 @@ Todo:
 
 1-5 scale of Priority (5 highest):
 
-5:  Track down $scope.currentUser and make sure it works everywhere
+5:  Fix storage permissions
+
+5:  Track down $scope.currentUser and make sure it works everywhere it's needed
 
 4:  Landing page has bad-looking bottom on big windows
 

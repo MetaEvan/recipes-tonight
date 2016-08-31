@@ -1,4 +1,4 @@
-app.controller("SearchController", ["$http", "$scope", "Search", "Auth", "$uibModal", "$timeout", function($http, $scope, Search, Auth, $uibModal, $timeout) {
+app.controller("SearchController", ["$http", "$scope", "Search", "Auth", "$uibModal", "$timeout", "ImageStorage", function($http, $scope, Search, Auth, $uibModal, $timeout, ImageStorage) {
   
   // Sets up some bound default variables
   $scope.find = {};
@@ -30,7 +30,7 @@ app.controller("SearchController", ["$http", "$scope", "Search", "Auth", "$uibMo
           return $scope.newRecipe;
         }
       },
-      backdrop:"static"
+      backdrop: "static"
     });
 
     modalInstance.result.then(function (result) {
@@ -40,11 +40,11 @@ app.controller("SearchController", ["$http", "$scope", "Search", "Auth", "$uibMo
     return modalInstance;
   }
 
-  //**********************************************************
+  $scope.openRecipeModal = function(recipe) {
 
-  $scope.openRecipe = function(recipe) {
-    alert("You're awesome!")
   }
+
+  //**********************************************************
 
 
   $scope.findRecipes = function(){
@@ -82,6 +82,10 @@ app.controller("SearchController", ["$http", "$scope", "Search", "Auth", "$uibMo
   let displayRecipes = function(searchResults) {
     $scope.searchResults = searchResults;
     $scope.searchingModalInstance.close();
+  }
+
+  $scope.getTestPicture = function() {
+    ImageStorage.getTestPicture();
   }
 
 }]);

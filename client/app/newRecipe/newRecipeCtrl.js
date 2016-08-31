@@ -32,7 +32,10 @@ app.controller("NewRecipeController", ["$scope", "$http", "ImageStorage", "NewRe
     },
     public: true,
     photos: {},
-    numPhotos: {},
+    numPhotos: {
+      text: 0,
+      food: 0
+    },
     source: "",
     sourceDomain: "",
     uploadedBy: "",
@@ -53,7 +56,7 @@ app.controller("NewRecipeController", ["$scope", "$http", "ImageStorage", "NewRe
   let submittingModal = function() {
     let modalInstance = $uibModal.open({
       // templateUrl: 'myModalContent.html',
-      template: "<h2 class='well'>Recipe Submitted!</h2>",
+      template: "<h2 class='well'>Recipe Submitting...</h2>",
       resolve: {
         fullRecipe: function () {
           return $scope.newRecipe;
@@ -98,11 +101,26 @@ app.controller("NewRecipeController", ["$scope", "$http", "ImageStorage", "NewRe
   })
   //**********************************************************
 
-  let displaySuccess = function(urls, submitModalInstance) {
+  let displaySuccess = function(urls, submitModalInstance, recipeId) {
     $scope.newRecipe = initialNewRecipe;
     submitModalInstance.close("displaySuccess success");
     successModal();
-    console.log("sucess urls", urls);
+    console.log("success urls", urls, "recipeId (if there are pictures)", recipeId);
+    if (recipeId) {
+      addPhotoUrls(urls, recipeId)
+    }
+  }
+
+  let addPhotoUrls = function(urls, recipeId) {
+    $http({
+      url: "/addPhotoUrls",
+      method: "POST",
+      data: {urls, recipeId}
+    }).then(function successCallbackAR(res) {
+      console.log("addPhotoUrls success", res)
+    }, function errorCallback(err) {
+      console.log(`Error addPhotoUrls: ${err.data}`)
+    })
   }
 
   $scope.addRecipe = function() {
@@ -125,20 +143,26 @@ app.controller("NewRecipeController", ["$scope", "$http", "ImageStorage", "NewRe
 
     let submitModalInstance = submittingModal();
 
-    console.log($scope.newRecipe, `submitted`);
+    console.log($scope.newRecipe, `submitting`);
 
     $http({
       url: "/addRecipe",
       method: "POST",
       data: $scope.newRecipe
-    }).then(function successCallback(res) {
+    }).then(function successCallbackAR(res) {
       console.log(`addRecipe response added recipe with docId: ${res.data}`);
-      if ($scope.newRecipe.numPhotos.text || $scope.newRecipe.numPhotos.text) {
-        return ImageStorage.storePhotos(photoFiles, res.data, isPublic).then(function() {
-          displaySuccess(urls, submitModalInstance);
+      if ($scope.newRecipe.numPhotos.text || $scope.newRecipe.numPhotos.food) {
+        return new Promise(function(resolve, reject) {
+          resolve(ImageStorage.storePhotos(photoFiles, res.data, isPublic))
+        })
+        .then(function(urls) {
+          displaySuccess(urls, submitModalInstance, res.data);
+        })
+        .catch(function(err) {
+          console.log("error:", err);
         })
       } else {
-        return displaySuccess("no photos", submitModalInstance);
+        displaySuccess("no photos", submitModalInstance);
       }
     }, function errorCallback(err) {
       console.log(`Error adding recipe: ${err.data}`)

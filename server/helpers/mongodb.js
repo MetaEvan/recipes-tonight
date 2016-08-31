@@ -88,6 +88,43 @@ var addRecipeIdToUser = function(db, userId, docId, cb = closeDB) {
   findAndModDB(db, userIdObj, sort, revision, options, "users", cb);
 }
 
+var addPhotoUrls = function({urls, recipeId}, cb = closeDB) {
+  let updateObj = {
+    thumb: {
+      foodPhotos: [],
+      textPhotos: [],
+    },
+    full: {
+      foodPhotos: [],
+      textPhotos: [],
+    }
+  };
+
+  for (let i = 0; i < urls.length; i++) {
+    let md = urls[i].metadata;
+    if (md.photoSubject !== "foodPhotos" && md.photoSubject !== "textPhotos") {
+      console.log("metadata", md)
+      throw "photoSubject error";
+    }
+    updateObj[md.size][md.photoSubject].push(urls[i].downloadURL)
+  }
+
+  connectDB(function(db) {
+    let recipeIdObj = { _id: ObjectId(recipeId) };
+    let revision = {
+      $set: { photos: updateObj },
+    };
+    let options = { 
+      update: true
+    };
+    let sort = [];
+
+    console.log("recipeIdObj", recipeIdObj, "revision", updateObj)
+
+    findAndModDB(db, recipeIdObj, sort, revision, options, "recipes", cb);
+  });
+};
+
 var findRecipes = function(searchRequest, cb) {       // Text Index  on recipeText was created in MongoDB for this to work
   let searchTerms = {};
 
@@ -151,7 +188,7 @@ var searchDB = function(db, searchTerms, col, cb = closeDB, ...args) {
       closeDB(db);
       throw `Error searching in ${col}: ${err}`;
     } else if (results.length) {
-      console.log('searchDB found:', results);
+      console.log('searchDB found:', results, "full food photos", results[0].photos.full);
     } else {
       console.log('No document(s) found with defined search criteria!');
     }  
@@ -190,11 +227,11 @@ var updateDB = function(db, searchTerms, revision, col, cb = closeDB, ...args) {
 
 var findAndModDB = function(db, query, sort, revision, options, col, cb = closeDB, ...args) {
   db.collection(col).findAndModify(query, sort, revision, options, function(err, results) {
-    console.log(`results in F&findAndModDB, ${results.value}`);
+    console.log(`results in findAndModDB, ${results}`, results);
     if (err) {
       closeDB(db);
       throw `Error updating in ${col}: ${err}`;
-    } else if (results) {
+    } else if (results && results.value) {
       console.log(`Updated ${results.value._id} in ${col} successfully`);
     } else {
       console.log(`Error: ${query} in ${col} not found`);
@@ -318,12 +355,20 @@ var userSchema = {
     dateAdded: 0,
     locationAdded: "",
   }
+
+  var testRevision = {
+      $set: { photos: {full:[42]} },
+    };
 // insertNewRecord(null,testRecipe, "recipes", findRecord);
 // findRecord(null, testSearchObj, "recipes");
 // updateRecord(null, testSearchObj, testRecipe2, "recipes", findRecord, testSearchObj, "recipes");
 // addRecipeIdToUser(null, "416e6f6e3030303030303034", "57717577fe2c61b854773f9e");
 // addRecipe(testRecipe2);
 // addRecipe(testRecipe2, function(){ addRecipe(testRecipe3) });
+
+// connectDB(function(db) {
+//   findAndModDB(db, { "_id": ObjectId("57c4a725177d26b9260d37f0") }, [], testRevision, {}, "recipes", closeDB);
+// })
 
 // *******************************************************************************
 // Todo: Destructure function parameters --function({ stuff, otherStuff})--?
@@ -340,5 +385,6 @@ module.exports = {
   addRecipe,
   findRecipes,
   allRecipes,
+  addPhotoUrls,
   closeDB
 };

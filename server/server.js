@@ -45,6 +45,18 @@ app.post("/addRecipe", function(req, res) {
 });
 
 
+
+app.post("/addPhotoUrls", function(req, res) {
+  console.log(`Post addPhotoUrls body:`, req.body);
+  mongodb.addPhotoUrls(req.body, function(db, recipe) {
+    console.log(`result addPhotoUrls`, recipe.photos)
+    res.status(201).send("success");
+    mongodb.closeDB(db);
+  })
+});
+
+
+
 app.post("/findRecipes", function(req, res) {
   console.log(`Post findRecipes body:`, req.body);
   mongodb.findRecipes(req.body, function(db, results) {
@@ -53,6 +65,8 @@ app.post("/findRecipes", function(req, res) {
     mongodb.closeDB(db);
   })
 });
+
+
 
 
 

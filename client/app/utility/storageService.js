@@ -32,10 +32,10 @@ utilityApp.factory('ImageStorage', ['$window', 'Auth', 'Utility', function ($win
       }
     }
 
-    return Promise.all(allPhotos.map(uploadPhoto)).then(function(itemArray) {
+    return Promise.all(allPhotos.map(uploadPhoto)).then(function(urlArray) {
 
-      console.log("Items are", itemArray);
-      return itemArray              // Todo: Figure out what these objects are and how to unpack them.
+      console.log("URLs are", urlArray);
+      return urlArray;            
     }).catch(error => {
       console.error('Error while uploading new pic', error);
     });
@@ -58,48 +58,106 @@ utilityApp.factory('ImageStorage', ['$window', 'Auth', 'Utility', function ($win
     console.log("uploadTask", uploadTask);
 
 
-   return uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
-      function(snapshot) {
-        // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('Upload is ' + progress + '% done');
-        switch (snapshot.state) {
-          case firebase.storage.TaskState.PAUSED: // or 'paused'
-            console.log('Upload is paused');
+    return new Promise(function(resolve, reject) {
+      uploadTask.on(firebase.storage.TaskEvent.STATE_CHANGED, // or 'state_changed'
+        function(snapshot) {
+          // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+          let progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          console.log('Upload is ' + progress + '% done');
+          switch (snapshot.state) {
+            case firebase.storage.TaskState.PAUSED: // or 'paused'
+              console.log('Upload is paused');
+              break;
+            case firebase.storage.TaskState.RUNNING: // or 'running'
+              console.log('Upload is running');
+              break;
+          }
+        }, function(error) {
+        switch (error.code) {
+          case 'storage/unauthorized':
+            // User doesn't have permission to access the object
             break;
-          case firebase.storage.TaskState.RUNNING: // or 'running'
-            console.log('Upload is running');
+
+          case 'storage/canceled':
+            // User canceled the upload
+            break;
+
+          case 'storage/unknown':
+            // Unknown error occurred, inspect error.serverResponse
+            break;
+          default:
+            // Other
             break;
         }
-      }, function(error) {
-      switch (error.code) {
-        case 'storage/unauthorized':
-          // User doesn't have permission to access the object
-          break;
+        reject(error);
+      }, function() {
+        // Upload completed successfully, now we can get the download URL
+        let downloadURL = uploadTask.snapshot.downloadURL;
+        let resolvedMetadata = uploadTask.snapshot.metadata.customMetadata;
+        console.log("downloadURL", downloadURL)
 
-        case 'storage/canceled':
-          // User canceled the upload
-          break;
-
-        case 'storage/unknown':
-          // Unknown error occurred, inspect error.serverResponse
-          break;
-      }
-    }, function() {
-      // Upload completed successfully, now we can get the download URL
-      var downloadURL = uploadTask.snapshot.downloadURL;
-      console.log("downloadURL", downloadURL)
-
-      return downloadURL;
+        resolve({
+          downloadURL, 
+          metadata: resolvedMetadata
+        });
+      });
     });
 
 
+  }
+  
+  // gs://recipes-tonight.appspot.com/recipes/public/57a154509a85f35b02c2975c/full-images/textPhotos/
+  // let retrievePhotos = function(recipe) {
+  //   let size = full;  // Todo: change for thumb cases?
+  //   let restriction = recipe.public ? "public" : "private";
+  //   let textPhotoPath = 'gs://recipes-tonight.appspot.com/recipes/' + restriction + '/' + recipe.id + '/' + size + '-images/textPhotos/text';
+  //   let foodPhotoPath = 'gs://recipes-tonight.appspot.com/recipes/' + restriction + '/' + recipe.id + '/' + size + '-images/foodPhotos/food';
+  //   if (recipe.numPhotos.text){
+  //     for (let i = 0; i < recipe.numPhotos.text; i++) {
+  //       var gsReference = storage.refFromURL(textPhotoPath + i + ".jpg")
+  //     }
+  //   }
+  // }
+
+  let retrievePhotos = function(recipe) {
+    let photos = {
+      text: [],
+      food: []
+    }
+    if (!recipe.numPhotos) return {err:"file storage error"};  // Todo: delete after resetting db?
+
+    let size = "full";  // Todo: change for thumb cases?
+    let restriction = recipe.public ? "public" : "private";
+    let textPhotoPath = 'gs://recipes-tonight.appspot.com/recipes/' + restriction + '/' + recipe.id + '/' + size + '-images/textPhotos/text';
+    let foodPhotoPath = 'gs://recipes-tonight.appspot.com/recipes/' + restriction + '/' + recipe.id + '/' + size + '-images/foodPhotos/food';
+    
+    if (recipe.numPhotos.text){
+      for (let i = 0; i < recipe.numPhotos.text; i++) {
+        photos.text.push(storage.refFromURL(textPhotoPath + i + ".jpg"));
+      }
+    }
+    if (recipe.numPhotos.food){
+      for (let i = 0; i < recipe.numPhotos.food; i++) {
+        photos.food.push(storage.refFromURL(foodPhotoPath + i + ".jpg"));
+      }
+    }
+    return photos;
+  }
+
+  let getTestPicture = function(cb) {
+    let url = "gs://recipes-tonight.appspot.com/recipes/public/57a154509a85f35b02c2975c/full-images/textPhotos/textPhotos0.jpg"
+    var gsReference = storage.refFromURL(url);
+    console.log(gsReference);
+    return gsReference;
   }
 
   return {
     addPhotoMetadata,
     storePhotos,
+    retrievePhotos,
+    getTestPicture,
   }
+
 }]);
 
   // From https://github.com/firebase/friendlypix/blob/master/web/scripts/firebase.js#L449
